@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 const userRoute = require('./Routes/user');
 
-const baseUrl = "0.0.0.0";
+const HOST = "0.0.0.0";
 
 const PORT = process.env.PORT || 4200; 
 

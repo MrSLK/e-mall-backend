@@ -5,7 +5,7 @@ const userRoute = require('./Routes/user');
 
 const baseUrl = "0.0.0.0";
 
-const PORT = 4200; 
+const PORT = process.env.PORT || 4200; 
 
 const corsOptions = {origin: '*'}
 
@@ -20,6 +20,7 @@ app.get('/', (req,res)=>{
 
 app.use('/user', userRoute);
 
-app.listen(PORT, baseUrl, ()=>{
-    console.log('server is listening to port',PORT);
+app.listen(PORT, HOST, ()=>{
+    console.log('server is listening to port ', PORT);
 })
+

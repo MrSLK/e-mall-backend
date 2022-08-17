@@ -12,7 +12,7 @@ module.exports.verifyToken = (req, res, next) => {
         
         next();
       } else {
-        res.send(err);
+        res.status(400).json({msg :'No token found! Please Provide a token.'})
       }
     })
   }

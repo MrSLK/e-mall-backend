@@ -12,3 +12,46 @@ CREATE TABLE users(
     account_status boolean NOT NULL,
     password VARCHAR(255) NOT NULL
 );
+
+--mall TABLE
+DROP TABLE IF EXISTS mall CASCADE;
+CREATE TABLE mall(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+--Category TABLE
+DROP TABLE IF EXISTS category CASCADE;
+CREATE TABLE category(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+--Product TABLE
+DROP TABLE IF EXISTS product CASCADE;
+CREATE TABLE product(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    category_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    picture_url VARCHAR(255) NOT NULL,
+    quantity INT NOT NULL,
+    FOREIGN KEY(category_id) REFERENCES category (id)
+);
+
+--shop TABLE
+DROP TABLE IF EXISTS shop CASCADE;
+CREATE TABLE shop(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    mall_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY(mall_id) REFERENCES mall (id)
+);

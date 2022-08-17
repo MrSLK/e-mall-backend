@@ -126,7 +126,7 @@ module.exports.login = (req, res) => {
     
             }
         } else {
-            return res.status(400).json({ error: "Unable to register user!" });
+            return res.status(400).json({ error: "User not found!" });
 
         }
     }).catch(err => {

@@ -68,7 +68,7 @@ CREATE TABLE cart(
     price FLOAT NOT NULL,
     total FLOAT NOT NULL,
     quantity INT NOT NULL,
-    cart_status VARCHAR(255) NOT NULL,
+    product_status VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY(product_id) REFERENCES product (id),

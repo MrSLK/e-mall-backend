@@ -37,11 +37,12 @@ CREATE TABLE product(
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
+    price FLOAT NOT NULL,
+    quantity INT NOT NULL,
     category_id INT NOT NULL,
+    picture_url VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    picture_url VARCHAR(255) NOT NULL,
-    quantity INT NOT NULL,
     FOREIGN KEY(category_id) REFERENCES category (id)
 );
 
@@ -51,7 +52,25 @@ CREATE TABLE shop(
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     mall_id INT NOT NULL,
+    category_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY(mall_id) REFERENCES mall (id)
+    FOREIGN KEY(mall_id) REFERENCES mall (id),
+    FOREIGN KEY(category_id) REFERENCES category (id)
+);
+
+--cart TABLE
+DROP TABLE IF EXISTS cart CASCADE;
+CREATE TABLE cart(
+    id SERIAL PRIMARY KEY,
+    product_id INT NOT NULL,
+    user_id INT NOT NULL,
+    price FLOAT NOT NULL,
+    total FLOAT NOT NULL,
+    quantity INT NOT NULL,
+    cart_status VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY(product_id) REFERENCES product (id),
+    FOREIGN KEY(user_id) REFERENCES users (id)
 );

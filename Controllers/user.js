@@ -9,8 +9,7 @@ const generateToken = (payload) => {
 
 //Usr registration
 module.exports.registration = (req, res) => {
-
-    console.log(req.body);
+    
     let account_status = true;
     if (req.body.first_name == '' || req.body.last_name == ''|| req.body.email == ''|| req.body.cellno == ''|| req.body.usertype == ''|| account_status == ''|| req.body.password == '') {
         
@@ -137,7 +136,6 @@ module.exports.login = (req, res) => {
 
 //Update profile
 module.exports.updateProfile = (req, res) => {
-    console.log('Body', req.body);
 
     let query = {
         text: 'UPDATE users SET first_name = $2, last_name = $3, email = $4, cellno = $5, updated_at = NOW()  WHERE id = $1',
@@ -145,14 +143,33 @@ module.exports.updateProfile = (req, res) => {
     }
 
     pool.query(query.text, query.value).then(response => {
-        console.log(response);
         if(response.rowCount > 0) {
             return res.status(200).json({ success: true })
         } else {
             return res.status(400).json({ error: "Unable to update profile!" });
         }
     }).catch((err) => {
-        console.log("Failed to update profile", err);
+        console.log(err);
         return res.status(400).json({ error: "Unable to update profile!" });
+    });
+}
+
+//Get all users
+module.exports.getUsers = (req, res) => {
+
+    let query = {
+        text: "SELECT * FROM users WHERE usertype != 'admin'"
+    }
+
+    pool.query(query.text).then(response => {
+        console.log(response);
+        if(response.rowCount > 0) {
+            return res.status(200).json(response.rows)
+        } else {
+            return res.status(400).json({ error: "Unable to get all users" });
+        }
+    }).catch((err) => {
+        console.log("Failed to update profile", err);
+        return res.status(400).json({ error: "Server error!" });
     });
 }

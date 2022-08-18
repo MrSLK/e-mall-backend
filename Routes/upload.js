@@ -9,4 +9,7 @@ router.post('/upload-docs', authController.verifyToken, authController.verifyUse
 //Save cloudinary response to db
 router.post('/my-docs', authController.verifyToken, authController.verifyUsertype, productController.createProduct)
 
+//Get all products
+router.get('/get-all-products', authController.verifyToken, authController.ververifyUsertype, productController.getProducts)
+
 module.exports = router;

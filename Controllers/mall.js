@@ -1,6 +1,6 @@
 const pool = require('../DB_Config/Config');
 
-module.exports.createmall = (req, res) => {
+module.exports.createMall = (req, res) => {
 
     let query = {
         text: 'INSERT INTO mall (name, location) VALUES ($1, $2)',

@@ -3,9 +3,10 @@ const cors = require('cors');
 const app = express();
 const userRoute = require('./Routes/user');
 const categoryRoute = require('./Routes/category');
+const cartRoute = require('./Routes/cart');
+const shopRoute = require('./Routes/shop');
 const mallRoute = require('./Routes/mall');
 const upload = require('./Routes/upload')
-const cloudinary = require('./Cloudinary/cloudinary');
 const multer = require('multer');
 const uploader = multer({ dest:`products/`})
 
@@ -27,6 +28,8 @@ app.get('/', (req,res)=>{
 app.use('/user', userRoute);
 app.use('/category', categoryRoute);
 app.use('/mall', mallRoute);
+app.use('/cart', cartRoute);
+app.use('/shop', shopRoute);
 app.use('/upload',uploader.single("file"), upload);
 
 app.listen(PORT, HOST, ()=>{

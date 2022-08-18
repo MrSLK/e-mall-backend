@@ -3,10 +3,10 @@ const router = Router();
 const mallController = require('../Controllers/mall');
 const auth = require('../Middleware/Authentication')
 
-//Create a new category
+//Create a new mall
 router.post('/add-mall', auth.verifyToken, auth.verifyUsertype, mallController.createmall);
 
-//Get all category
+//Get all malls
 router.get('/get-malls', auth.verifyToken, auth.verifyUsertype, mallController.getMalls);
 
 module.exports = router;

@@ -13,19 +13,19 @@ module.exports.createCategory = (req, res) => {
     }
 
     pool.query(tester.text, tester.value).then((result) => {
-        if (result.rowCount < 0){
-            pool.query(query.text, query.value).then((response) => {
-                console.log(response);
-                if (response.rowCount > 0) {
-                    return res.status(200).json({ msg: 'Category created successfully'});
-                } else {
-                    return res.status(400).json({error: 'Failed to create category'});
-                }
-            }).catch((err) => {
-                console.log(err);
-            });
-        } else {
+        if (result.rowCount > 0){
             return res.status(400).json({error: 'Category already exists!'});
+        } else {
+            pool.query(query.text, query.value).then((response) => {
+            console.log(response);
+            if (response.rowCount > 0) {
+                return res.status(200).json({ msg: 'Category created successfully'});
+            } else {
+                return res.status(400).json({error: 'Failed to create category'});
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
         }
     })
 }

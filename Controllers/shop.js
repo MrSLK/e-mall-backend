@@ -29,14 +29,32 @@ module.exports.createShop = (req, res) => {
     })
 }
 
+module.exports.getShopsOfAMall = (req, res) => {
+
+    let query = {
+        text: 'SELECT * FROM shop WHERE mall_id = $1',
+        value: [req.body.mall_id]
+    }
+
+    pool.query(query.text, query.value).then((response) => {
+        if (response.rowCount > 0) {
+            return res.status(200).json(response.rows);
+        } else {
+            return res.status(400).json({error: 'Failed to get shops of this mall!'});
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
+}
+
 module.exports.getShops = (req, res) => {
 
     let query = {
-        text: 'SELECT * FROM shop'
+        text: 'SELECT * FROM shop',
+        value: [req.body.mall_id]
     }
 
-    pool.query(query.text).then((response) => {
-        console.log(response);
+    pool.query(query.text, query.value).then((response) => {
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows);
         } else {

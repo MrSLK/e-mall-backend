@@ -12,6 +12,9 @@ router.post('/registration', userController.registration);
 //Update user
 router.post('/update-profile', auth.verifyToken, userController.updateProfile);
 
+//Update password
+router.post('/update-password', auth.verifyToken, userController.updatePassword);
+
 //get all users
 router.post('/get-all', auth.verifyToken, auth.verifyUsertype, userController.getUsers);
 

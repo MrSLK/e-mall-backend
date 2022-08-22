@@ -173,3 +173,25 @@ module.exports.getUsers = (req, res) => {
         return res.status(400).json({ error: "Server error!" });
     });
 }
+
+//Update password
+module.exports.updatePassword = (req, res) => {
+
+    let password = bcrypt.hashSync(req.body.password, 8);
+    
+    let query = {text: 'UPDATE users SET password = $2, updated_at = NOW()  WHERE id = $1',
+    value: [req.body.user_id, password]
+    }
+
+    pool.query(query.text, query.value).then(response => {
+        
+        if(response.rowCount > 0) {
+            return res.status(200).json({success: 'Password updated successfully'})
+        } else {
+            return res.status(400).json({ error: "Unable to update password" });
+        }
+    }).catch((err) => {
+        console.log("Failed to update profile", err);
+        return res.status(400).json({ error: "Server error!" });
+    });
+}

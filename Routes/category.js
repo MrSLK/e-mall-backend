@@ -7,6 +7,6 @@ const auth = require('../Middleware/Authentication')
 router.post('/add-category', auth.verifyToken, auth.verifyUsertype, categoryController.createCategory);
 
 //Get all category
-router.get('/get-categories', auth.verifyToken, auth.verifyUsertype, categoryController.getCategories);
+router.get('/get-categories', categoryController.getCategories);
 
 module.exports = router;

@@ -13,7 +13,7 @@ const uploader = multer({ dest:`products/`})
 
 const HOST = "0.0.0.0";
 
-const PORT = process.env.PORT || 4200; 
+const PORT = process.env.PORT || 5000; 
 
 const corsOptions = {origin: '*'}
 

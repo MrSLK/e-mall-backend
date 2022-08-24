@@ -7,6 +7,6 @@ const auth = require('../Middleware/Authentication')
 router.post('/add-mall', auth.verifyToken, auth.verifyUsertype, mallController.createMall);
 
 //Get all malls
-router.get('/get-malls', auth.verifyToken, auth.verifyUsertype, mallController.getMalls);
+router.get('/get-malls', mallController.getMalls);
 
 module.exports = router;

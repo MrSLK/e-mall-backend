@@ -28,11 +28,11 @@ module.exports.uploadPictureToCloudinary = async (req, res, next) => {
         //take cloudinary response and get url set cert_url to cloudinary url
 
         let object = {
-            response_url : uploadResponse.url,
-            name: req.file.name
+            picture_url : uploadResponse.url,
+            name: req.file.originalname
         }
 
-        return res.status(201).json({object});
+        return res.status(201).json(object);
 
 
     } catch (error) {
@@ -60,7 +60,7 @@ module.exports.createProduct = (req, res) => {
             } else { res.status(400).json('Product upload failed') }
         })
         .catch(err => {
-            
+            console.log(err);
             return res.status(400).json({error: 'Server error! Failed to upload product'});
         });
 

@@ -74,3 +74,20 @@ CREATE TABLE cart(
     FOREIGN KEY(product_id) REFERENCES product (id),
     FOREIGN KEY(user_id) REFERENCES users (id)
 );
+
+--address TABLE
+DROP TABLE IF EXISTS address CASCADE;
+CREATE TABLE address(
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    address_type VARCHAR(255) NOT NULL,
+    street_address VARCHAR(255) NOT NULL,
+    complex_or_buildings VARCHAR(255) NOT NULL,
+    suburb VARCHAR(255) NOT NULL,
+    city_or_town VARCHAR(255) NOT NULL,
+    province VARCHAR(255) NOT NULL,
+    postal_code VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY(user_id) REFERENCES users (id)
+);

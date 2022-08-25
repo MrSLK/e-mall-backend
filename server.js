@@ -8,6 +8,7 @@ const shopRoute = require('./Routes/shop');
 const mallRoute = require('./Routes/mall');
 const upload = require('./Routes/upload');
 const productRoute = require('./Routes/product');
+const addressRoute = require('./Routes/address');
 const multer = require('multer');
 const uploader = multer({ dest:`products/`})
 
@@ -31,6 +32,8 @@ app.use('/category', categoryRoute);
 app.use('/mall', mallRoute);
 app.use('/cart', cartRoute);
 app.use('/shop', shopRoute);
+app.use('/product', productRoute);
+app.use('/address', addressRoute);
 app.use('/product', productRoute);
 app.use('/upload',uploader.single("file"), upload);
 

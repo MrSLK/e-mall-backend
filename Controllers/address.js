@@ -7,17 +7,15 @@ module.exports.saveAddress = (req, res) => {
         text: `INSERT INTO address (
             user_id, 
             address_type, 
-            street_address, 
-            complex_or_buildings, 
+            street_address,
             suburb, 
             city_or_town, 
             province, 
             postal_code) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         value: [req.body.user_id, 
             req.body.address_type, 
-            req.body.street_address, 
-            req.body.complex_or_buildings, 
+            req.body.street_address,
             req.body.suburb, 
             req.body.city_or_town, 
             req.body.province, 
@@ -61,17 +59,15 @@ module.exports.updateAddress = (req, res) => {
         text: `UPDATE address SET
         address_type = $2, 
         street_address = $3, 
-        complex_or_buildings = $4, 
-        suburb = $5, 
-        city_or_town = $6, 
-        province = $7, 
-        postal_code = $8,
+        suburb = $4, 
+        city_or_town = $5, 
+        province = $6, 
+        postal_code = $7,
         updated_at = NOW() WHERE
         user_id = $1`,
         value: [req.body.user_id, 
             req.body.address_type, 
             req.body.street_address, 
-            req.body.complex_or_buildings, 
             req.body.suburb, 
             req.body.city_or_town, 
             req.body.province, 
@@ -104,45 +100,17 @@ module.exports.updateAddress = (req, res) => {
 module.exports.deleteAddress = (req, res) => {
 
     let query = {
-        text: `UPDATE address SET
-        address_type = $2, 
-        street_address = $3, 
-        complex_or_buildings = $4, 
-        suburb = $5, 
-        city_or_town = $6, 
-        province = $7, 
-        postal_code = $8,
-        updated_at = NOW() WHERE
-        user_id = $1 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        value: [req.body.user_id, 
-            req.body.address_type, 
-            req.body.street_address, 
-            req.body.complex_or_buildings, 
-            req.body.suburb, 
-            req.body.city_or_town, 
-            req.body.province, 
-            req.body.postal_code]
-    }
-    
-    let tester = {
-        text: 'SELECT * FROM address WHERE user_id = $1',
-        value: [req.body.user_id]
+        text: `DELETE FROM address  WHERE user_id = $1 AND address_id = $2`,
+        value: [req.body.user_id, req.body.id]
     }
 
-    pool.query(tester.text, tester.value).then((result) => {
-        if (result.rowCount > 0) {
-            pool.query(query.text, query.value).then((response) => {
-                if (response.rowCount > 0) {
-                    return res.status(200).json({ msg: 'Addresses updated successfully'});
-                } else {
-                    return res.status(400).json({error: 'Failed to update addresses'});
-                }
-            }).catch((err) => {
-                console.log(err);
-            });
+    pool.query(query.text, query.value).then((response) => {
+        if (response.rowCount > 0) {
+            return res.status(200).json({ msg: 'Addresses deleted successfully'});
         } else {
-            return res.status(400).json({error: 'No addresses were found.'});
+            return res.status(400).json({error: 'Failed to delete addresses'});
         }
-    }).catch((err) => {});
+    }).catch((err) => {
+        console.log(err);
+    });
 };

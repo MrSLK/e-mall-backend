@@ -82,7 +82,6 @@ CREATE TABLE address(
     user_id INT NOT NULL,
     address_type VARCHAR(255) NOT NULL,
     street_address VARCHAR(255) NOT NULL,
-    complex_or_buildings VARCHAR(255) NOT NULL,
     suburb VARCHAR(255) NOT NULL,
     city_or_town VARCHAR(255) NOT NULL,
     province VARCHAR(255) NOT NULL,

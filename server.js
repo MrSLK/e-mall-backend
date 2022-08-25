@@ -6,6 +6,7 @@ const categoryRoute = require('./Routes/category');
 const cartRoute = require('./Routes/cart');
 const shopRoute = require('./Routes/shop');
 const mallRoute = require('./Routes/mall');
+const paymentRoute = require('./Routes/payment');
 const upload = require('./Routes/upload');
 const productRoute = require('./Routes/product');
 const addressRoute = require('./Routes/address');
@@ -34,6 +35,7 @@ app.use('/cart', cartRoute);
 app.use('/shop', shopRoute);
 app.use('/product', productRoute);
 app.use('/address', addressRoute);
+app.use('/payment', paymentRoute);
 app.use('/product', productRoute);
 app.use('/upload',uploader.single("file"), upload);
 

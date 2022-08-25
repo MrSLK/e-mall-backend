@@ -69,11 +69,34 @@ module.exports.createProduct = (req, res) => {
 module.exports.getProducts = (req, res) => {
 
     let query = {
-        text: 'select * from products where category_id = $1',
-        value: [req.body.category_id]
+        text: 'select * from product where category_id = $1',
+        value: [req.params.category_id]
     }
 
-    pool.query(query.text, query.value).then((response => {
+    if (req.params.category_id === undefined) {
+        return res.status(400).json({message: 'Category cannot be empty! Please enter a category'});
+    } else {
+        pool.query(query.text, query.value).then((response => {
+            if (response.rowCount > 0) {
+                return res.status(200).json(response.rows)
+            } else {
+                return res.status(404).json({ message: 'No products found' });
+            }
+        })).catch((err) => {
+            console.log(err);
+            return res.status(400).json({ message: 'Server error' });
+        });
+    }
+}
+
+module.exports.getAllProducts = (req, res) => {
+
+    let query = {
+        text: 'select * from product'
+    }
+
+    console.log("This is being called");
+    pool.query(query.text).then((response => {
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows)
         } else {

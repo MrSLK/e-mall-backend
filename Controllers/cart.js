@@ -2,6 +2,8 @@ const pool = require('../DB_Config/Config');
 
 module.exports.addToCart = (req, res) => {
 
+    console.log(req.body);
+
     let product_status = 'in-cart';
 
     let newQuery = {
@@ -9,7 +11,7 @@ module.exports.addToCart = (req, res) => {
         value: [req.body.user_id, req.body.product_id]
     }
 
-    pool(newQuery.text, newQuery.value).then((result) => {
+    pool.query(newQuery.text, newQuery.value).then((result) => {
         if (result.rowCount > 0) {
         
             return res.status(400).json({ error:'Product already exists in cart' });
@@ -17,13 +19,34 @@ module.exports.addToCart = (req, res) => {
             if (req.body.quantity > 0) {
                 //product_status must either be 'in-cart' or 'checked-out' or 'paid' 
                 let query = {
-                    text: 'INSERT INTO cart (product_id, user_id, price, total, quantity, product_status, user_id ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-                    value: [req.body.product_id, req.body.user_id, req.body.price, req.body.total, req.body.quantity, product_status, req.body.product_status, req.body.user_id]
+                    text: 'INSERT INTO cart (product_id, user_id, price, total, quantity, product_status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+                    value: [req.body.product_id, req.body.user_id, req.body.price, req.body.total, req.body.quantity, product_status]
                 }
         
-                pool(query.text, query.value).then((response) =>{
+                pool.query(query.text, query.value).then((response) =>{
+                    console.log("From insterting to cart:", response);
                     if (response.rowCount > 0) {
-                        return res.status(200).json({message: 'Product added to cart'});
+
+                        if (response.rows[0].quantity < req.body.quantity) {
+                            return res.status(400).json({message: 'Out of stock!'})
+                            
+                        } else {
+                            let thirdQuery = {
+                                text: 'UPDATE product SET quantity = (SELECT quantity FROM product WHERE id = $1) - $2 WHERE id = $1',
+                                value: [req.body.product_id, req.body.quantity]
+                            }
+    
+                            pool.query(thirdQuery.text, thirdQuery.value).then((update) => {
+                                if (update.rowCount > 0) {
+                                    return res.status(200).json({message: 'Product added to cart'});
+                                } else {
+                                    
+                                }
+                            }).catch((error) => {
+                                console.log(error);
+                            });
+                        }
+                        
                     } else {
                         return res.status(400).json({message: 'Failed to add product to cart'});
                     }
@@ -51,7 +74,7 @@ module.exports.getFromCart = (req, res) => {
         value: [req.body.user_id]
     } 
 
-    pool(query.text, query.value).then((response) => {
+    pool.query(query.text, query.value).then((response) => {
 
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows);
@@ -79,7 +102,7 @@ module.exports.changeCartStatus = (req, res) => {
         value: [req.body.user_id]
     } 
 
-    pool(query.text, query.value).then((response) => {
+    pool.query(query.text, query.value).then((response) => {
 
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows);
@@ -99,7 +122,7 @@ module.exports.removeFromCart = (req, res) => {
         value: [req.body.user_id, req.body.product_id]
     }
 
-    pool(query.text, query.value).then((response) => {
+    pool.query(query.text, query.value).then((response) => {
         if (response.rowCount > 0) {
             return res.status(200).json({message: 'Product deleted successfully'});
         } else {

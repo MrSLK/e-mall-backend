@@ -273,4 +273,3 @@ const addCandidateMailer = (email, name, password) => {
     });
 
 }
-

@@ -195,3 +195,82 @@ module.exports.updatePassword = (req, res) => {
         return res.status(400).json({ error: "Server error!" });
     });
 }
+
+//Forgot password
+module.exports.forgotPassword = (req, res) => {
+
+    let email = req.body.email;
+
+    let query = {
+        text: 'SELECT email, first_name, last_name FROM users WHERE email = $1',
+        value: [email]
+    }
+    
+    pool.query(query.text, query.value).then(data => {
+        if(data.rowCount > 0){
+            let name = data.rows[0].last_name + ' ' + data.rows[0].first_name;
+            let newPassword = Math.random().toString(36).slice(-8)
+            let hashedPassword = bcrypt.hashSync(newPassword, 8)
+            let query_1 = {
+                text: 'UPDATE users SET password = $1 WHERE email = $2',
+                value: [hashedPassword, email]
+            }
+            pool.query(query_1.text, query_1.value).then(uploadRes => {
+                addCandidateMailer(email, name, newPassword)
+                return res.status(201).json('Password Updated')
+            }).catch(err => {
+                return res.status(401).json(err);
+            })
+
+        }else{
+            return res.status(401).json('Email not found');
+        }
+    }).catch(err => {
+        console.log(err);
+        return res.status(401).json(err);
+    })
+}
+
+const Transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+        user: "koenaite8@gmail.com",
+        pass: "vkqtqhprquyzdhys"
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+});
+
+const addCandidateMailer = (email, name, password) => {
+    let mailOptions = {
+        from: 'koenaite8@gmail.com', // sender address
+        to: email, // list of receivers
+        //cc:'etlhako@gmail.com',
+        subject: 'Temporary Password', // Subject line
+        // text: text, // plain text body
+        html:
+            `<h3>Greetings ${name},</h3><br>
+        <h3>This email serves to inform you that your account is now active😊, <br>
+        
+        Below are your login credentials you, your password can be updated at your own discretion on our platform:</h3><br>
+        <h2><ul><u>Login Details</u><h2/>
+        Username: ${email}<br>
+        password: ${password}<br>
+        visit our site at <a href="https://students-projects.vercel.app/">Visit e-mall.com!</a><br><br>
+        </ul><h3>
+        kind Regards,<br>
+        E-Mall Team
+         </h3>`
+        // html body
+    };
+    Transporter.sendMail(mailOptions, function (err, data) {
+        if (err) {
+            console.log(err);
+        }
+    });
+
+}
+

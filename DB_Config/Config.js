@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const { Pool } = require('pg');
 
-const conn_string = "postgres://kxjbpxblaomzaj:e892845037297fc1046a554449abab30332212a4882503f44e9260b340a5d97a@ec2-3-219-19-205.compute-1.amazonaws.com:5432/df8etq83s75mmd";
+const conn_string = "postgres://mwgllixp:CK7lyBkeXU0zp9zR-xFJbxs-AvEE4fNl@jelani.db.elephantsql.com/mwgllixp";
 
 pool = new Pool({
 

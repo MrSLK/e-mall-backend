@@ -7,10 +7,10 @@ const auth = require('../Middleware/Authentication')
 router.post('/add-to-cart', auth.verifyToken, cartController.addToCart);
 
 //Change cart status
-router.get('/update-cart-status', auth.verifyToken, cartController.changeCartStatus);
+router.get('/update-cart-status/:token', auth.verifyToken, cartController.changeCartStatus);
 
 //Delete cart
-router.get('/delete-from-cart', auth.verifyToken, cartController.removeFromCart);
+router.delete('/delete-from-cart', auth.verifyToken, cartController.removeFromCart);
 
 //Get from cart
 router.get('/get-from-cart', auth.verifyToken, cartController.getFromCart);

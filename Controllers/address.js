@@ -1,3 +1,4 @@
+const { log } = require('console');
 const pool = require('../DB_Config/Config');
 
 //Save address
@@ -35,7 +36,7 @@ module.exports.saveAddress = (req, res) => {
 
 //Get address of a user
 module.exports.getUserAddress = (req, res) => {
-
+    
     let query = {
         text: `SELECT * FROM address WHERE user_id = $1`,
         value: [req.body.user_id]

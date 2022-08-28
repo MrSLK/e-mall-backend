@@ -3,7 +3,7 @@ const router = Router();
 const addressController = require('../Controllers/address');
 const auth = require('../Middleware/Authentication')
 
-//Create a new address
+//Create a new address 
 router.post('/add-address', auth.verifyToken, addressController.saveAddress);
 
 //Update the address

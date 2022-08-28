@@ -26,7 +26,7 @@ module.exports.saveAddress = (req, res) => {
         if (response.rowCount > 0) {
             return res.status(200).json({ msg: 'Addresses added successfully'});
         } else {
-            return res.status(400).json({error: 'Failed to save addresses'});
+            return res.status(400).json({error: 'Failed to save address'});
         }
     }).catch((err) => {
         console.log(err);
@@ -45,10 +45,11 @@ module.exports.getUserAddress = (req, res) => {
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows);
         } else {
-            return res.status(400).json({error: 'Failed to get user addresses'});
+            return res.status(400).json({error: 'No address found'});
         }
     }).catch((err) => {
         console.log(err);
+        return res.status(400).json({error: 'Failed to get user address'});
     });
 };
 

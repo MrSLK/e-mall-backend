@@ -16,7 +16,7 @@ router.post('/update-profile', auth.verifyToken, userController.updateProfile);
 router.post('/update-password', auth.verifyToken, userController.updatePassword);
 
 //get all users
-router.post('/get-all', auth.verifyToken, auth.verifyUsertype, userController.getUsers);
+router.get('/get-all/:token', auth.verifyToken, auth.verifyUsertype, userController.getUsers);
 
 //Update password
 router.post('/forgot-password', userController.forgotPassword);

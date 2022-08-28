@@ -13,6 +13,6 @@ router.post('/update-address', auth.verifyToken, addressController.updateAddress
 router.delete('/delete-address', auth.verifyToken, addressController.deleteAddress);
 
 //Get address
-router.get('/get-address', auth.verifyToken, addressController.getUserAddress);
+router.get('/get-address/:token', auth.verifyToken, addressController.getUserAddress);
 
 module.exports = router;

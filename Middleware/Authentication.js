@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 module.exports.verifyToken = (req, res, next) => {
-    var token = req.body.token;
+    var token = req.body.token ? req.body.token : req.params.token;
     jwt.verify(token, 'w', function(err, decoded){
       if(!err){
         

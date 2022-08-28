@@ -7,7 +7,7 @@ const auth = require('../Middleware/Authentication')
 router.post('/add-shop', auth.verifyToken, auth.verifyUsertype, shopController.createShop);
 
 //Get all shops of a specific mall
-router.get('/get-shops-for-a-mall', shopController.getShopsOfAMall);
+router.get('/get-shops-for-a-mall/:mall_id', shopController.getShopsOfAMall);
 
 //Get all shops
 router.get('/get-shop', shopController.getShops);

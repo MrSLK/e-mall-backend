@@ -33,7 +33,7 @@ module.exports.getShopsOfAMall = (req, res) => {
 
     let query = {
         text: 'SELECT * FROM shop WHERE mall_id = $1',
-        value: [req.body.mall_id]
+        value: [req.params.mall_id]
     }
 
     pool.query(query.text, query.value).then((response) => {

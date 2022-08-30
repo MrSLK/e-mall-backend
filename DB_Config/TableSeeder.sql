@@ -51,12 +51,10 @@ DROP TABLE IF EXISTS shop CASCADE;
 CREATE TABLE shop(
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    mall_id INT NOT NULL,
-    category_id INT NOT NULL,
+    mall_id INT[] NOT NULL,
+    category_id INT[] NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY(mall_id) REFERENCES mall (id),
-    FOREIGN KEY(category_id) REFERENCES category (id)
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 --cart TABLE
@@ -90,3 +88,5 @@ CREATE TABLE address(
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY(user_id) REFERENCES users (id)
 );
+
+INSERT INTO shop (name, mall_id, category_id) VALUES ('Shoprite', ARRAY[1,2,3,4,5,6,7], ARRAY[14,15,11,10]);

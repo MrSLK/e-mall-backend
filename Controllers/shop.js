@@ -32,7 +32,7 @@ module.exports.createShop = (req, res) => {
 module.exports.getShopsOfAMall = (req, res) => {
 
     let query = {
-        text: 'SELECT * FROM shop WHERE mall_id = $1',
+        text: `Select * from shop WHERE $1 = ANY(mall_id)`,
         value: [req.params.mall_id]
     }
 

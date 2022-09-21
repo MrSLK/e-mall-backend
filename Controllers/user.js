@@ -122,7 +122,7 @@ module.exports.login = (req, res) => {
      
                      return res.status(200).json(object)
                 } else {
-                    return res.status(400).json({message: 'Account is locked.'});
+                    return res.status(400).json({error: 'Account is locked.'});
                 }
             }  else {
                 return res.status(400).json({ error: "Password incorrect" });

@@ -101,25 +101,29 @@ module.exports.login = (req, res) => {
             
             if(passwordIsValid){
                 
-                let payload = {
-                   id: response.rows[0].id,
-                   usertype: response.rows[0].usertype
+                if (response.rows[0].account_status === true){
+                    let payload = {
+                        id: response.rows[0].id,
+                        usertype: response.rows[0].usertype
+                     }
+     
+                     let stringPayload = JSON.stringify(payload);
+                     let token = generateToken(stringPayload); //jwt token
+                 
+                     let object = {
+                         user_id: response.rows[0].id, 
+                         first_name: response.rows[0].first_name, 
+                         last_name: response.rows[0].last_name, 
+                         email: response.rows[0].email, 
+                         cellno: response.rows[0].cellno,
+                         account_status: response.rows[0].account_status,
+                         token: token
+                     }
+     
+                     return res.status(200).json(object)
+                } else {
+                    return res.status(400).json({message: 'Account is locked.'});
                 }
-
-                let stringPayload = JSON.stringify(payload);
-                let token = generateToken(stringPayload); //jwt token
-            
-                let object = {
-                    user_id: response.rows[0].id, 
-                    first_name: response.rows[0].first_name, 
-                    last_name: response.rows[0].last_name, 
-                    email: response.rows[0].email, 
-                    cellno: response.rows[0].cellno,
-                    account_status: response.rows[0].account_status,
-                    token: token
-                }
-
-                return res.status(200).json(object)
             }  else {
                 return res.status(400).json({ error: "Password incorrect" });
     
@@ -231,13 +235,42 @@ module.exports.forgotPassword = (req, res) => {
     })
 }
 
+//Deactivate account
+module.exports.deactivateAccount = (req, res) => {
+
+    let id;
+
+    if (req.body.usertype == 'admin') {
+        id == req.body.client_id
+    } else {
+        id == req.body.user_id
+    }
+
+    let query = {
+        text: 'UPDATE users SET account_status = false, updated_at = NOW()  WHERE id = $1',
+        value: [id]
+    }
+    
+    pool.query(query.text, query.value).then(data => {
+        console.log(data);
+        if(data.rowCount > 0){
+            return res.status(200).json({ success: true })
+        }else{
+            return res.status(401).json('Account not found');
+        }
+    }).catch(err => {
+        console.log(err);
+        return res.status(401).json(err);
+    })
+}
+
 const Transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-        user: "koenaite8@gmail.com",
-        pass: "vkqtqhprquyzdhys"
+        user: "mogaudavi@gmail.com",
+        pass: "smawjbgpafbgyebl"
     },
     tls: {
         rejectUnauthorized: false

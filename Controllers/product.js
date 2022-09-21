@@ -95,12 +95,34 @@ module.exports.getAllProducts = (req, res) => {
         text: 'select * from product'
     }
 
-    console.log("This is being called");
     pool.query(query.text).then((response => {
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows)
         } else {
-            return res.status(404).json({ message: 'No products found' });
+            return res.status(401).json({ message: 'No products found' });
+        }
+    })).catch((err) => {
+        console.log(err);
+        return res.status(400).json({ message: 'Server error' });
+    });
+}
+
+module.exports.getAllProductsOfAShop = (req, res) => {
+
+    console.log("Shiba");
+    console.log(req.params);
+
+    let query = {
+        text: 'select * from product where category_id IN (select unnest(category_id) from shop where id = $1)',
+        value: [req.params.shop_id]
+    }
+
+    pool.query(query.text, query.value).then((response => {
+        console.log(response);
+        if (response.rowCount > 0) {
+            return res.status(200).json(response.rows)
+        } else {
+            return res.status(400).json({ message: 'No products found' });
         }
     })).catch((err) => {
         console.log(err);

@@ -18,7 +18,10 @@ router.post('/update-password', auth.verifyToken, userController.updatePassword)
 //get all users
 router.get('/get-all/:token', auth.verifyToken, auth.verifyUsertype, userController.getUsers);
 
-//Update password
+//Update password deactivateAccount
 router.post('/forgot-password', userController.forgotPassword);
+
+//Update password 
+router.post('/deactivate-account', auth.verifyToken, userController.deactivateAccount);
 
 module.exports = router;

@@ -12,4 +12,7 @@ router.get('/get-all-products', productController.getAllProducts)
 //Get products of a specific category
 router.get('/get-products/:category_id', productController.getProducts)
 
+//Get products of a specific shop
+router.get('/get-products-for-shop/:shop_id', productController.getAllProductsOfAShop)
+
 module.exports = router;

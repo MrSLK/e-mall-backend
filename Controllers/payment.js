@@ -7,7 +7,7 @@ const moment = MomentRange.extendMoment(Moment);
 const config = require('../DB_Config/stripe');
 const stripe = require('stripe')(config.secretKey);
 
-exports.index = (req, res) => {
+module.exports.index = (req, res) => {
     const fromDate = moment();
     const toDate = moment().add(5, 'years');
     const range = moment().range(fromDate, toDate);
@@ -18,7 +18,7 @@ exports.index = (req, res) => {
     return res.render('index', { months, years, message: req.flash() });
 }
 
-exports.payment = async (req, res) => {
+module.exports.payment = async (req, res) => {
     const token = await createToken(req.body);
     if (token.error) {
         req.flash('danger', token.error)
@@ -67,7 +67,7 @@ const createCharge = async (tokenId, amount) => {
     try {
         charge = await stripe.charges.create({
             amount: amount,
-            currency: 'usd',
+            currency: 'zar',
             source: tokenId,
             description: 'My first payment'
         });
@@ -75,4 +75,8 @@ const createCharge = async (tokenId, amount) => {
         charge.error = error.message;
     }
     return charge;
+}
+
+module.exports.saveCard = (req, res) => {
+
 }

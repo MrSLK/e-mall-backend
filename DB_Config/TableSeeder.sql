@@ -89,4 +89,29 @@ CREATE TABLE address(
     FOREIGN KEY(user_id) REFERENCES users (id)
 );
 
+DROP TABLE IF EXISTS cards CASCADE;
+CREATE TABLE cards (
+    id SERIAL PRIMARY KEY,
+    card_number INT(16) NOT NULL, 
+    exp_month INT(2) NOT NULL, 
+    exp_year INT(4) NOT NULL, 
+    cvv INT(3) NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users (id)
+);
+
+DROP TABLE IF EXISTS payment CASCADE;
+CREATE TABLE payment (
+    id SERIAL PRIMARY KEY,
+    amount FLOAT NOT NULL,
+    payment_status VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    card_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL, 
+    FOREIGN KEY(user_id) REFERENCES users (id)
+);
+
 INSERT INTO shop (name, mall_id, category_id) VALUES ('Shoprite', ARRAY[1,2,3,4,5,6,7], ARRAY[14,15,11,10]);

@@ -3,8 +3,8 @@ const pool = require('../DB_Config/Config');
 module.exports.createCategory = (req, res) => {
 
     let query = {
-        text: 'INSERT INTO category (name, description) VALUES ($1, $2)',
-        value: [req.body.name, req.body.description]
+        text: 'INSERT INTO category (name, description, group) VALUES ($1, $2, $3)',
+        value: [req.body.name, req.body.description, group]
     }
 
     let tester = {

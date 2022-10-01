@@ -11,6 +11,7 @@ const generateToken = (payload) => {
 module.exports.registration = (req, res) => {
     
     let account_status = true;
+    let address = null;
     if (req.body.first_name == '' || req.body.last_name == ''|| req.body.email == ''|| req.body.cellno == ''|| req.body.usertype == ''|| account_status == ''|| req.body.password == '') {
         
         return res.status(400).json({ error: "Input field(s) cannot be empty!" });
@@ -22,8 +23,8 @@ module.exports.registration = (req, res) => {
 
                 let password = bcrypt.hashSync(req.body.password, 8);
                 let query = {
-                    text: `INSERT INTO users (first_name, last_name, email, cellno, usertype, account_status, password) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, usertype, first_name, last_name, email, cellno, account_status`,
-                    value: [req.body.first_name, req.body.last_name, req.body.email, req.body.cellno, req.body.usertype, account_status, password ]
+                    text: `INSERT INTO users (first_name, last_name, email, cellno, usertype, account_status, password, address) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, usertype, first_name, last_name, email, cellno, account_status, address`,
+                    value: [req.body.first_name, req.body.last_name, req.body.email, req.body.cellno, req.body.usertype, account_status, password, address ]
                 }
             
                 let usernameVerification = {
@@ -52,6 +53,7 @@ module.exports.registration = (req, res) => {
                                      email: response.rows[0].email, 
                                      cellno: response.rows[0].cellno,
                                      account_status: response.rows[0].account_status,
+                                     address: response.rows[0].address,
                                      token: token
                                  }
                  

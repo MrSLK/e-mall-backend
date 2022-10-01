@@ -45,8 +45,8 @@ module.exports.createProduct = (req, res) => {
 
     //Save upload response to the db
     query = {
-        text: 'INSERT INTO product (name, description, price, quantity, category_id, picture_url) VALUES ($1,$2,$3,$4, $5, $6)',
-        value: [req.body.name, req.body.description, req.body.price, req.body.quantity, req.body.category_id, req.body.picture_url]
+        text: 'INSERT INTO product (name, description, price, quantity, category_id, shop_id, picture_url) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        value: [req.body.name, req.body.description, req.body.price, req.body.quantity, req.body.category_id, req.body.shop_id, req.body.picture_url]
     }
     
     // DB query
@@ -128,4 +128,17 @@ module.exports.getAllProductsOfAShop = (req, res) => {
         console.log(err);
         return res.status(400).json({ message: 'Server error' });
     });
+}
+
+module.exports.getOneProduct = (req, res) => {
+
+    let query = {
+        text: 'select * from products where id = $1', 
+        value: [req.body.product_id]
+    }
+
+    let cheaperQuery = {
+        text: `select * from products where shop_id != $1 AND category_id = $2`,
+        value: [req.body.shop_id, req.body.category_id]
+    }
 }

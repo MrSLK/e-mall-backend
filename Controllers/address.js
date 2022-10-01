@@ -4,6 +4,10 @@ const pool = require('../DB_Config/Config');
 //Save address
 module.exports.saveAddress = (req, res) => {
 
+    let newQuery = {
+        text: 'select * from address where user_id = $1',
+        value: [req.body.user_id]
+    }
     let query = {
         text: `INSERT INTO address (
             user_id, 
@@ -23,11 +27,22 @@ module.exports.saveAddress = (req, res) => {
             req.body.postal_code]
     }
 
-    pool.query(query.text, query.value).then((response) => {
-        if (response.rowCount > 0) {
-            return res.status(200).json({ msg: 'Addresses added successfully'});
+    pool.query(newQuery.text, newQuery.value).then((result) => {
+        if (result.rowCount >= 2) {
+            return res.status(400).json({msg: 'Exceeded maximum number of addresses to enter'})
+        } else if (result.rows[0].address_type === req.body.address_type || result.rows[1].address_type === req.body.address_type) {
+            return res.status(400).json({msg: `'${req.body.address_type}' adddress already exists!`})
         } else {
-            return res.status(400).json({error: 'Failed to save address'});
+        
+            pool.query(query.text, query.value).then((response) => {
+                if (response.rowCount > 0) {
+                    return res.status(200).json({ msg: 'Addresses added successfully'});
+                } else {
+                    return res.status(400).json({msg: 'Failed to save address'});
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
         }
     }).catch((err) => {
         console.log(err);

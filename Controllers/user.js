@@ -89,12 +89,11 @@ module.exports.login = (req, res) => {
     var usernameType = username.includes("@") ? "email" : "cellno";
 
     let query = {
-        text: `SELECT id, first_name, last_name, email, cellno, usertype, password, account_status FROM users WHERE ${usernameType} = $1`,
+        text: `SELECT id, first_name, last_name, email, cellno, usertype, password, address, account_status FROM users WHERE ${usernameType} = $1`,
         value: [req.body.username]
     }
 
     pool.query(query.text, query.value).then(response => {
-
         if(response.rows[0]){
 
             var passwordIsValid = bcrypt.compareSync(
@@ -113,13 +112,14 @@ module.exports.login = (req, res) => {
                      let token = generateToken(stringPayload); //jwt token
                  
                      let object = {
-                         user_id: response.rows[0].id, 
-                         first_name: response.rows[0].first_name, 
-                         last_name: response.rows[0].last_name, 
-                         email: response.rows[0].email, 
-                         cellno: response.rows[0].cellno,
-                         account_status: response.rows[0].account_status,
-                         token: token
+                        user_id: response.rows[0].id, 
+                        first_name: response.rows[0].first_name, 
+                        last_name: response.rows[0].last_name, 
+                        email: response.rows[0].email, 
+                        cellno: response.rows[0].cellno,
+                        account_status: response.rows[0].account_status,
+                        address: response.rows[0].address,
+                        token: token
                      }
      
                      return res.status(200).json(object)

@@ -42,7 +42,6 @@ module.exports.uploadPictureToCloudinary = async (req, res, next) => {
 }
 
 module.exports.createProduct = (req, res) => {
-
     //Save upload response to the db
     query = {
         text: 'INSERT INTO product (name, description, price, quantity, category_id, shop_id, picture_url) VALUES ($1, $2, $3, $4, $5, $6, $7)',

@@ -133,3 +133,56 @@ module.exports.removeFromCart = (req, res) => {
         return res.status(400).json({message: 'Internal Server Error'});
 });
 }
+
+
+module.exports.proceedToCheckout = (req, res) => {
+    
+    let quantity = req.body.quantity, productId = req.body.productId, shopId = req.body.ShopId, newQantity;
+
+    let query = {
+        text: 'SELECT quantity FROM products WHERE id = $1 AND shop_id = $2',
+        value: [productId, shopId]
+    }
+
+    let addressStatus = {
+        text: 'SELECT address FROM users WHERE user_id = $1',
+        values: [req.body.user_id]
+    }
+
+    let updateQuantity = {
+        text: 'UPDATE products SET quantity = $3 WHERE id = $1 AND shop_id = $2',
+        value: [productId, shopId, newQantity]
+    }
+
+    pool.query(addressStatus.text, addressStatus.values).then((result) => {
+
+        if(result.rows[0].address == null) {
+            return res.status(400).json({message: "Address cannot be null. Please update your address!"});
+        }
+        pool.query(query.text, query.value).then((response) => {
+            console.log(response);
+            if (quantity > response.rows[0].quantity) {
+                return res.status(400).json({message: "We don't have enough stock for this purchase!"});
+            }
+            newQantity = response.rows[0].quantity - quantity;
+
+            pool.query(updateQuantity.text, updateQuantity.value).then((results) => {
+                console.log(results);
+
+                if(results.rowCount > 0) {
+                    return res.status(200).json({message: "Check out successful!"});
+                }
+            }).catch((err) => {
+                console.log(err);
+                return res.status(500).json({message: 'Internal Server Error'});
+            });
+            
+        }).catch((err) => {
+            console.log(err);
+            return res.status(500).json({message: 'Internal Server Error'});
+        });
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({message: 'Internal Server Error'});
+    });
+}

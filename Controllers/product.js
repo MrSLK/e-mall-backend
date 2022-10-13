@@ -132,12 +132,45 @@ module.exports.getAllProductsOfAShop = (req, res) => {
 module.exports.getOneProduct = (req, res) => {
 
     let query = {
-        text: 'select * from products where id = $1', 
+        text: 'select * from product where id = $1', 
         value: [req.body.product_id]
     }
 
     let cheaperQuery = {
-        text: `select * from products where shop_id != $1 AND category_id = $2`,
+        text: `select * from product where shop_id != $1 AND category_id = $2`,
         value: [req.body.shop_id, req.body.category_id]
     }
+
+    pool.query(query.text, query.value).then((response) => {
+        console.log(response);
+
+        if (response.rowCount > 0) {
+            pool.query(cheaperQuery.text, cheaperQuery.value).then((result) => {
+                console.log(result);
+                let object = {
+                    name: response.rows[0].name,
+                    description: response.rows[0].description,
+                    price: response.rows[0].price,
+                    quantity_left: response.rows[0].quantity,
+                    cheaperProduct: {
+                        name: result.rows[0].name, 
+                        description: result.rows[0].description, 
+                        price: result.rows[0].price,
+                        quantity_left: result.rows[0].quantity,
+                        shop_id: result.rows[0].shop_id
+                    }
+                }
+
+                return res.status(201).json(object);
+                
+            }).catch((err) => {
+                console.log(err);
+                return res.status(400).json({ message: 'Server error' });
+            });
+        }
+    }).catch((err) => {
+        console.log(err);
+        return res.status(400).json({ message: 'Server error' });
+    });
+
 }

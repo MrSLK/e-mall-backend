@@ -132,12 +132,35 @@ module.exports.getAllProductsOfAShop = (req, res) => {
 module.exports.getOneProduct = (req, res) => {
 
     let query = {
-        text: 'select * from product where id = $1', 
+        text: `select product.id, 
+        product.name, 
+        product.description, 
+        product.price, 
+        product.quantity, 
+        product.category_id,
+        product.shop_id,
+        product.picture_url,
+        shop.name
+        from product, shop 
+        WHERE product.shop_id = shop.shop_id 
+        AND product.id = $1 `,
         value: [req.body.product_id]
     }
 
     let cheaperQuery = {
-        text: `select * from product where shop_id != $1 AND category_id = $2`,
+        text: `select product.id, 
+        product.name, 
+        product.description, 
+        product.price, 
+        product.quantity, 
+        product.category_id,
+        product.shop_id,
+        product.picture_url,
+        shop.name
+        from product, shop 
+        WHERE product.shop_id = shop.shop_id 
+        AND product.shop_id != $1 
+        AND category_id = $2`,
         value: [req.body.shop_id, req.body.category_id]
     }
 

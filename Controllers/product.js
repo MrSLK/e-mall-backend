@@ -142,7 +142,7 @@ module.exports.getOneProduct = (req, res) => {
         product.picture_url,
         shop.name
         from product, shop 
-        WHERE product.shop_id = shop.shop_id 
+        WHERE product.shop_id = shop.id 
         AND product.id = $1 `,
         value: [req.body.product_id]
     }
@@ -158,7 +158,7 @@ module.exports.getOneProduct = (req, res) => {
         product.picture_url,
         shop.name
         from product, shop 
-        WHERE product.shop_id = shop.shop_id 
+        WHERE product.shop_id = shop.id 
         AND product.shop_id != $1 
         AND category_id = $2`,
         value: [req.body.shop_id, req.body.category_id]

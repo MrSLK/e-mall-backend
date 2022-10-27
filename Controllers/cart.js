@@ -156,7 +156,7 @@ module.exports.proceedToCheckout = (req, res) => {
     }
 
     let salesQuery = {
-        text: 'INSERT INTO sales (user_id, product_id, shop_id, quantity) VALUES ($1, $2, $3, $4)',
+        text: 'INSERT INTO orders (user_id, product_id, shop_id, quantity) VALUES ($1, $2, $3, $4)',
         value: [req.body.user_id, req.body.product_id, req.body.shop_id, req.body.quantity]
     }
 

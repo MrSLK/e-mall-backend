@@ -89,14 +89,14 @@ CREATE TABLE payment (
     FOREIGN KEY(user_id) REFERENCES users (id)
 );
 
---SALES TABLE
+--orders TABLE
 DROP TABLE IF EXISTS CASCADE;
-CREATE TABLE sales(
+CREATE TABLE orders(
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     shop_id INT NOT NULL,
-    quantity INT NOT NULL,,
+    quantity INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY(user_id) REFERENCES users (id),

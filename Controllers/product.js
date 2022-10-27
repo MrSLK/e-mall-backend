@@ -108,9 +108,6 @@ module.exports.getAllProducts = (req, res) => {
 
 module.exports.getAllProductsOfAShop = (req, res) => {
 
-    console.log("Shiba");
-    console.log(req.params);
-
     let query = {
         text: 'select * from product where category_id IN (select unnest(category_id) from shop where id = $1)',
         value: [req.params.shop_id]

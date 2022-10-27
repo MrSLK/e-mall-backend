@@ -7,13 +7,13 @@ const auth = require('../Middleware/Authentication')
 router.post('/login', userController.login);
 
 //Regtration
-router.post('/registration', userController.registration);
+router.post('/registration', auth.verifyEmail, userController.registration);
 
 //Update user
 router.post('/update-profile', auth.verifyToken, userController.updateProfile);
 
 //Update password
-router.post('/update-password', auth.verifyToken, userController.updatePassword);
+router.post('/update-password', auth.verifyToken, auth.verifyEmail, userController.updatePassword);
 
 //get all users
 router.get('/get-all/:token', auth.verifyToken, auth.verifyUsertype, userController.getUsers);

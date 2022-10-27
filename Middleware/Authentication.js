@@ -1,3 +1,4 @@
+const pool = require('../DB_Config/Config');
 const jwt = require('jsonwebtoken');
 
 module.exports.verifyToken = (req, res, next) => {
@@ -23,4 +24,22 @@ module.exports.verifyUsertype = (req, res, next) => {
     } else {
         res.status(400).send('User access denied')
     }
+}
+
+module.exports.verifyEmail = (req, res, next) => {
+
+  let query = {
+    text: 'SELECT email from user',
+    value: req.body.email
+  }
+
+  pool.query(query.text, query.value).then((result) => {
+    if(result.rowCount > 0){
+      return res.status(400).json({msg: 'Email already exists'});
+    } else {
+      next();
+    }
+  }).catch((err) => {
+    console.log(err);
+  })
 }

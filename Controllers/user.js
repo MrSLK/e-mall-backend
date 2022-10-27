@@ -144,11 +144,12 @@ module.exports.login = (req, res) => {
 module.exports.updateProfile = (req, res) => {
 
     let query = {
-        text: 'UPDATE users SET first_name = $2, last_name = $3, email = $4, cellno = $5, updated_at = NOW()  WHERE id = $1',
-        value: [req.body.user_id, req.body.first_name,req.body.last_name, req.body.email, req.body.cellno]
+        text: 'UPDATE users SET first_name = $2, last_name = $3, email = $4, cellno = $5, address = $6, updated_at = NOW()  WHERE id = $1',
+        value: [req.body.user_id, req.body.first_name,req.body.last_name, req.body.email, req.body.cellno, req.body.address]
     }
 
     pool.query(query.text, query.value).then(response => {
+        console.log(response);
         if(response.rowCount > 0) {
             return res.status(200).json({ success: true })
         } else {

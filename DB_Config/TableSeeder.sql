@@ -89,6 +89,21 @@ CREATE TABLE payment (
     FOREIGN KEY(user_id) REFERENCES users (id)
 );
 
+--SALES TABLE
+DROP TABLE IF EXISTS CASCADE;
+CREATE TABLE sales(
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    shop_id INT NOT NULL,
+    quantity INT NOT NULL,,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY(user_id) REFERENCES users (id),
+    FOREIGN KEY(shop_id) REFERENCES shop (id),
+    FOREIGN KEY(product_id) REFERENCES product (id)
+);
+
 --cart TABLE 
 -- DROP TABLE IF EXISTS cart CASCADE;
 -- CREATE TABLE cart(

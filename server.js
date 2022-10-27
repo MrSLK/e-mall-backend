@@ -10,6 +10,7 @@ const paymentRoute = require('./Routes/payment');
 const upload = require('./Routes/upload');
 const productRoute = require('./Routes/product');
 const addressRoute = require('./Routes/address');
+const adminReportRoute = require('./Routes/adminReport');
 const multer = require('multer');
 const uploader = multer({ dest:`products/`})
 
@@ -37,6 +38,7 @@ app.use('/product', productRoute);
 app.use('/address', addressRoute);
 app.use('/payment', paymentRoute);
 app.use('/product', productRoute);
+app.use('/report', adminReportRoute);
 app.use('/upload',uploader.single("file"), upload);
 
 app.listen(PORT, HOST, ()=>{

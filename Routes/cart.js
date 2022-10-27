@@ -15,4 +15,7 @@ router.delete('/delete-from-cart', auth.verifyToken, cartController.removeFromCa
 //Get from cart
 router.get('/get-from-cart', auth.verifyToken, cartController.getFromCart);
 
+//Proceed to checkout
+router.post('/proceed-to-checkout', auth.verifyToken, cartController.proceedToCheckout);
+
 module.exports = router;

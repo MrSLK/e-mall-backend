@@ -1,4 +1,3 @@
-const { log } = require('console');
 const pool = require('../DB_Config/Config');
 
 //Save address

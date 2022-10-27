@@ -50,11 +50,10 @@ module.exports.getShopsOfAMall = (req, res) => {
 module.exports.getShops = (req, res) => {
 
     let query = {
-        text: 'SELECT * FROM shop',
-        value: [req.body.mall_id]
+        text: 'SELECT * FROM shop'
     }
 
-    pool.query(query.text, query.value).then((response) => {
+    pool.query(query.text).then((response) => {
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows);
         } else {

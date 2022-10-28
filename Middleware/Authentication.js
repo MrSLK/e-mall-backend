@@ -28,6 +28,7 @@ module.exports.verifyUsertype = (req, res, next) => {
 
 module.exports.verifyEmail = (req, res, next) => {
 
+  console.log();
   let query = {
     text: 'SELECT email from user',
     value: req.body.email

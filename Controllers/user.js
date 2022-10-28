@@ -9,6 +9,8 @@ const generateToken = (payload) => {
 
 //Usr registration
 module.exports.registration = (req, res) => {
+
+    console.log(req.body);
     
     let account_status = true;
     let address = null;

@@ -171,6 +171,7 @@ module.exports.getOneProduct = (req, res) => {
                     name: response.rows[0].product,
                     description: response.rows[0].description,
                     price: response.rows[0].price,
+                    picture_url: response.rows[0].picture_url,
                     quantity_left: response.rows[0].quantity,
                     shop: response.rows[0].shop,
                     cheaperProduct: {
@@ -178,6 +179,7 @@ module.exports.getOneProduct = (req, res) => {
                         description: result.rows[0].description, 
                         price: result.rows[0].price,
                         quantity_left: result.rows[0].quantity,
+                        picture_url: result.rows[0].picture_url,
                         shop_name: result.rows[0].shop_name
                     }
                 }

@@ -5,7 +5,7 @@ module.exports.userReport = (req, res) => {
 
     let query = {
         text: `select first_name, last_name, email, cellno, account_status, usertype from users WHERE usertype = 'admin'`,
-        value: [req.body.user_id]
+        value: [req.params.user_id]
     }
 
     pool.query(query.text, query.value).then(async (result) => {

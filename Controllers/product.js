@@ -130,14 +130,14 @@ module.exports.getOneProduct = (req, res) => {
 
     let query = {
         text: `select product.id, 
-        product.name, 
+        product.name AS product, 
         product.description, 
         product.price, 
         product.quantity, 
         product.category_id,
         product.shop_id,
         product.picture_url,
-        shop.name
+        shop.name AS shop
         from product, shop 
         WHERE product.shop_id = shop.id 
         AND product.id = $1 `,
@@ -146,38 +146,39 @@ module.exports.getOneProduct = (req, res) => {
 
     let cheaperQuery = {
         text: `select product.id, 
-        product.name, 
+        product.name AS product_name, 
         product.description, 
         product.price, 
         product.quantity, 
         product.category_id,
         product.shop_id,
         product.picture_url,
-        shop.name
+        shop.name AS shop_name
         from product, shop 
         WHERE product.shop_id = shop.id 
         AND product.shop_id != $1 
-        AND category_id = $2`,
+        AND product.category_id = $2`,
         value: [req.body.shop_id, req.body.category_id]
     }
 
     pool.query(query.text, query.value).then((response) => {
-        console.log(response);
+        console.log("response", response.rows);
 
         if (response.rowCount > 0) {
             pool.query(cheaperQuery.text, cheaperQuery.value).then((result) => {
-                console.log(result);
+                console.log("result", result.rows);
                 let object = {
-                    name: response.rows[0].name,
+                    name: response.rows[0].product,
                     description: response.rows[0].description,
                     price: response.rows[0].price,
                     quantity_left: response.rows[0].quantity,
+                    shop: response.rows[0].shop,
                     cheaperProduct: {
-                        name: result.rows[0].name, 
+                        name: result.rows[0].product_name, 
                         description: result.rows[0].description, 
                         price: result.rows[0].price,
                         quantity_left: result.rows[0].quantity,
-                        shop_id: result.rows[0].shop_id
+                        shop_name: result.rows[0].shop_name
                     }
                 }
 
@@ -185,7 +186,7 @@ module.exports.getOneProduct = (req, res) => {
                 
             }).catch((err) => {
                 console.log(err);
-                return res.status(400).json({ message: 'Server error' });
+                return res.status(400).json({ message: 'Cheaper -Server error' });
             });
         }
     }).catch((err) => {

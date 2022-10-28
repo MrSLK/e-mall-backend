@@ -15,4 +15,7 @@ router.get('/get-products/:category_id', productController.getProducts)
 //Get products of a specific shop
 router.get('/get-products-for-shop/:shop_id', productController.getAllProductsOfAShop)
 
+//Get product
+router.post('/get-product-one-product', productController.getOneProduct)
+
 module.exports = router;

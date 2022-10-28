@@ -7,6 +7,6 @@ const auth = require('../Middleware/Authentication')
 router.post('/generate-user-report', reportController.userReport);
 
 //Generate product report
-router.get('/generate-product-report/:token', reportController.productReport);
+router.get('/generate-product-report', reportController.productReport);
 
 module.exports = router;

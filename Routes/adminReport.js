@@ -4,7 +4,7 @@ const reportController = require('../Controllers/adminReport');
 const auth = require('../Middleware/Authentication')
 
 //Generate user report
-router.post('/generate-user-report/:user_id', reportController.userReport);
+router.get('/generate-user-report/:user_id', reportController.userReport);
 
 //Generate product report
 router.get('/generate-product-report', reportController.productReport);

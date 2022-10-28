@@ -3,8 +3,9 @@ const ObjectsToCsv = require('objects-to-csv');
 
 module.exports.userReport = (req, res) => {
 
+    console.log(req.params);
     let query = {
-        text: `select first_name, last_name, email, cellno, account_status, usertype from users WHERE usertype = 'admin'`,
+        text: `select first_name, last_name, email, cellno, account_status, usertype from users WHERE id != $1`,
         value: [req.params.user_id]
     }
 

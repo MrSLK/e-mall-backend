@@ -17,7 +17,6 @@ module.exports.userReport = (req, res) => {
             // Save to file:
             await csv.toDisk('./Users.csv');
 
-            // return res.status(201).json({sales: result.rows});
             return res.download("./Users.csv")
         } else {
             return res.status(200).json({ message: 'No users found' });

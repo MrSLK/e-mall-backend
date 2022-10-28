@@ -6,7 +6,7 @@ const auth = require('../Middleware/Authentication')
 //Generate user report
 router.get('/generate-user-report/:user_id', reportController.userReport);
 
-//Generate product report
+//Generate a product report
 router.get('/generate-product-report', reportController.productReport);
 
 module.exports = router;

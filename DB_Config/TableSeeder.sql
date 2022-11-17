@@ -67,13 +67,13 @@ CREATE TABLE shop(
 DROP TABLE IF EXISTS cards CASCADE;
 CREATE TABLE cards (
     id SERIAL PRIMARY KEY,
-    card_number INT NOT NULL, 
+    card_number VARCHAR(17) NOT NULL, 
     exp_month INT NOT NULL, 
     exp_year INT NOT NULL, 
     cvv INT NOT NULL,
     user_id INT NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY(user_id) REFERENCES users (id)
 );
 -- Payment table

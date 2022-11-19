@@ -97,6 +97,7 @@ CREATE TABLE orders(
     product_id INT NOT NULL,
     shop_id INT NOT NULL,
     quantity INT NOT NULL,
+    totalDue REAL NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY(user_id) REFERENCES users (id),

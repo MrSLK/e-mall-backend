@@ -138,7 +138,7 @@ module.exports.removeFromCart = (req, res) => {
 module.exports.proceedToCheckout = (req, res) => {
     console.log(req.body);
 
-    let quantity = req.body.quantity, product_id = req.body.product_id, shop_id = req.body.Shop_id, newQantity;
+    let quantity = req.body.quantity, product_id = req.body.product_id, shop_id = req.body.Shop_id, newQantity, totalDue = req.body.totalDue;
 
     let query = {
         text: 'SELECT quantity FROM products WHERE id = $1 AND shop_id = $2',
@@ -156,8 +156,8 @@ module.exports.proceedToCheckout = (req, res) => {
     }
 
     let salesQuery = {
-        text: 'INSERT INTO orders (user_id, product_id, shop_id, quantity) VALUES ($1, $2, $3, $4)',
-        value: [req.body.user_id, req.body.product_id, req.body.shop_id, req.body.quantity]
+        text: 'INSERT INTO orders (user_id, product_id, shop_id, quantity, totalDue) VALUES ($1, $2, $3, $4, $5)',
+        value: [req.body.user_id, req.body.product_id, req.body.shop_id, req.body.quantity, req.body.totalDue]
     }
 
     pool.query(addressStatus.text, addressStatus.values).then((result) => {

@@ -168,18 +168,22 @@ module.exports.getOneProduct = (req, res) => {
             pool.query(cheaperQuery.text, cheaperQuery.value).then((result) => {
                 console.log("result", result.rows);
                 let object = {
+                    product_id: response.rows[0].id,
                     name: response.rows[0].product,
                     description: response.rows[0].description,
                     price: response.rows[0].price,
                     picture_url: response.rows[0].picture_url,
                     quantity_left: response.rows[0].quantity,
+                    category_id: response.rows[0].category_id,
                     shop: response.rows[0].shop,
                     cheaperProduct: {
+                        cheaper_product_id: result.rows[0].id,
                         name: result.rows[0].product_name, 
                         description: result.rows[0].description, 
                         price: result.rows[0].price,
                         quantity_left: result.rows[0].quantity,
                         picture_url: result.rows[0].picture_url,
+                        category_id: result.rows[0].category_id,
                         shop_name: result.rows[0].shop_name
                     }
                 }

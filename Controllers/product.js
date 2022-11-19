@@ -177,7 +177,7 @@ module.exports.getOneProduct = (req, res) => {
                     category_id: response.rows[0].category_id,
                     shop: response.rows[0].shop,
                     cheaperProduct: {
-                        cheaper_product_id: result.rows[0].id,
+                        id: result.rows[0].id,
                         name: result.rows[0].product_name, 
                         description: result.rows[0].description, 
                         price: result.rows[0].price,

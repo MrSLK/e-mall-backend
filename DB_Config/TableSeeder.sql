@@ -90,19 +90,17 @@ CREATE TABLE payment (
 );
 
 --orders TABLE
-DROP TABLE IF EXISTS CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
 CREATE TABLE orders(
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    product_id INT NOT NULL,
-    shop_id INT NOT NULL,
-    quantity INT NOT NULL,
+    product_id INT[] NOT NULL,
+    shop_id INT[] NOT NULL,
+    quantity INT[] NOT NULL,
     totalDue REAL NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY(user_id) REFERENCES users (id),
-    FOREIGN KEY(shop_id) REFERENCES shop (id),
-    FOREIGN KEY(product_id) REFERENCES product (id)
+    FOREIGN KEY(user_id) REFERENCES users (id)
 );
 
 --cart TABLE 

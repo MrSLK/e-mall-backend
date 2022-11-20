@@ -134,25 +134,160 @@ module.exports.removeFromCart = (req, res) => {
     });
 }
 
+// module.exports.proceedToCheckout = (req, res) => {
+//     console.log(req.body);
+
+//     let quantity = req.body.quantity, product_id = req.body.product_id, shop_id = req.body.Shop_id, newQantity, totalDue = req.body.totalDue;
+
+//     let query = {
+//         text: 'SELECT quantity FROM products WHERE id = $1 AND shop_id = $2',
+//         value: [product_id, shop_id]
+//     }
+
+//     let addressStatus = {
+//         text: 'SELECT address FROM users WHERE id = $1',
+//         values: [req.body.user_id]
+//     }
+
+//     let updateQuantity = {
+//         text: 'UPDATE products SET quantity = $3 WHERE id = $1 AND shop_id = $2',
+//         value: [req.body.product_id, shop_id, newQantity]
+//     }
+
+//     let salesQuery = {
+//         text: 'INSERT INTO orders (user_id, product_id, shop_id, quantity, totalDue) VALUES ($1, $2, $3, $4, $5)',
+//         value: [req.body.user_id, req.body.product_id, req.body.shop_id, req.body.quantity, req.body.totalDue]
+//     }
+
+//     pool.query(addressStatus.text, addressStatus.values).then((result) => {
+//         console.log(result);
+
+//         if (result.rows[0].address == null) {
+//             return res.status(400).json({ message: "Address cannot be null. Please update your address!" });
+//         }
+//         pool.query(query.text, query.value).then((response) => {
+//             console.log(response);
+//             if (quantity > response.rows[0].quantity) {
+//                 return res.status(400).json({ message: "We don't have enough stock for this purchase!" });
+//             }
+//             newQantity = response.rows[0].quantity - quantity;
+
+//             pool.query(updateQuantity.text, updateQuantity.value).then((results) => {
+//                 console.log(results);
+
+//                 if (results.rowCount > 0) {
+//                     pool.query(salesQuery.text, salesQuery.value).then((success) => {
+
+//                         if(success.rowCount > 0){
+//                             return res.status(200).json({ message: "Check out successful!" });
+//                         } else{
+//                             return res.status(400).json({ message: "Failed to save sales!" });
+//                         }
+//                     }).catch((error) => {
+//                         console.log(error);
+//                     });
+//                 }
+//             }).catch((err) => {
+//                 console.log(err);
+//                 return res.status(500).json({ message: 'Update quantity - Internal Server Error' });
+//             });
+
+//         }).catch((err) => {
+//             console.log(err);
+//             return res.status(500).json({ message: 'Check product - Internal Server Error' });
+//         });
+//     }).catch((err) => {
+//         console.log(err);
+//         return res.status(500).json({ message: 'Check address - Internal Server Error' });
+//     });
+// }
+
+// module.exports.proceedToCheckout = (req, res) => {
+
+//    let product_id = req.body.product_id, shop_id = req.body.shop_id, quantity = req.body.quantity, totalDue = req.body.totalDue
+
+//     let addressStatus = {
+//         text: 'SELECT address FROM users WHERE id = $1',
+//         values: [req.body.user_id]
+//     }
+//     let salesQuery = {
+//         text: 'INSERT INTO orders (user_id, product_id, shop_id, quantity, totalDue) VALUES ($1, $2, $3, $4, $5)',
+//         value: [req.body.user_id, product_id, shop_id, quantity, totalDue]
+//     }
+
+//     pool.query(addressStatus.text, addressStatus.values).then(async (result) => {
+
+//         if (result.rows[0].address == null) {
+//             return res.status(400).json({ message: "Address cannot be null. Please update your address!" });
+//         }
+//         let response;
+//         for(let i = 0; i < product_id.length; i++){
+//         let quantityA = quantity[i],product_idA = product_id[i],shop_idA = shop_id
+
+//     let newQantity, shiba;
+
+//     let query = {
+//         text: 'SELECT quantity FROM product WHERE id = $1 AND shop_id = $2',
+//         value: [product_idA, shop_idA]
+//     }
+
+//     pool.query(query.text, query.value).then((response) => {
+//         if (quantity > response.rows[0].quantity) {
+//             return res.status(400).json({ errMsg: "We don't have enough stock for this purchase!" });
+//         }
+//         newQantity = response.rows[0].quantity - quantityA;
+//         console.log("new quantity ->", newQantity);
+
+//         let updateQuantity = {
+//             text: 'UPDATE product SET quantity = $2 WHERE id = $1',
+//             value: [product_idA, newQantity]
+//         }
+
+//         pool.query(updateQuantity.text, updateQuantity.value).then((results) => {
+//             console.log(results);
+//             if(results.rowCount > 0){
+//                 console.log("This is called")
+//                 shiba = {success: true};
+//             } else {
+//                 return res.status(400).json({errMsg: "Failed to update quantity!"})
+//             }
+//         }).catch((err) => {
+//             console.log("this err ->",err);
+//             return res.status(400).json({ errMsg: "Update quantity - Internal Server Error" });
+//         });
+
+//     }).catch((err) => {
+//         console.log(err);
+//         return res.status(400).json({ errMsg: 'Check product - Internal Server Error' });
+//     });
+
+
+//             if(shiba){
+//                 pool.query(salesQuery.text, salesQuery.value).then((success) => {
+
+//                     if(success.rowCount > 0){
+//                         return res.status(200).json({ message: "Check out successful!" });
+//                     } else{
+//                         return res.status(400).json({ message: "Failed to save sales!" });
+//                     }
+//                 }).catch((error) => {
+//                     console.log(error);
+//                 });
+//             }
+//         }
+//     }).catch((err) => {
+//         console.log(err);
+//         return res.status(500).json({ message: 'Check address - Internal Server Error' });
+//     });
+// }
 
 module.exports.proceedToCheckout = (req, res) => {
-    console.log(req.body);
 
-    let quantity = req.body.quantity, product_id = req.body.product_id, shop_id = req.body.Shop_id, newQantity, totalDue = req.body.totalDue;
-
-    let query = {
-        text: 'SELECT quantity FROM products WHERE id = $1 AND shop_id = $2',
-        value: [product_id, shop_id]
-    }
+    let prod_quantity = 0, p = 0, quantity = req.body.quantity, product_id = req.body.product_id, shop_id = req.body.Shop_id, newQantity, totalDue = req.body.totalDue;
 
     let addressStatus = {
         text: 'SELECT address FROM users WHERE id = $1',
         values: [req.body.user_id]
-    }
-
-    let updateQuantity = {
-        text: 'UPDATE products SET quantity = $3 WHERE id = $1 AND shop_id = $2',
-        value: [req.body.product_id, shop_id, newQantity]
     }
 
     let salesQuery = {
@@ -161,42 +296,65 @@ module.exports.proceedToCheckout = (req, res) => {
     }
 
     pool.query(addressStatus.text, addressStatus.values).then((result) => {
-        console.log(result);
 
         if (result.rows[0].address == null) {
             return res.status(400).json({ message: "Address cannot be null. Please update your address!" });
         }
-        pool.query(query.text, query.value).then((response) => {
-            console.log(response);
-            if (quantity > response.rows[0].quantity) {
-                return res.status(400).json({ message: "We don't have enough stock for this purchase!" });
+
+        for (let i = 0; i < product_id.length; i++) {
+               
+            let query = {
+                text: 'SELECT quantity FROM product WHERE id = $1 AND shop_id = $2',
+                value: [req.body.product_id[i], req.body.shop_id[i]]
             }
-            newQantity = response.rows[0].quantity - quantity;
 
-            pool.query(updateQuantity.text, updateQuantity.value).then((results) => {
-                console.log(results);
-
-                if (results.rowCount > 0) {
-                    pool.query(salesQuery.text, salesQuery.value).then((success) => {
-
-                        if(success.rowCount > 0){
-                            return res.status(200).json({ message: "Check out successful!" });
-                        } else{
-                            return res.status(400).json({ message: "Failed to save sales!" });
-                        }
-                    }).catch((error) => {
-                        console.log(error);
-                    });
+            pool.query(query.text, query.value).then((response) => {
+                
+                if (quantity[i] > response.rows[0].quantity) {
+                    return res.status(400).json({ message: "We don't have enough stock for this purchase!" });
                 }
+                newQantity = response.rows[0].quantity - prod_quantity;
+
+                let updateQuantity = {
+                    text: 'UPDATE product SET quantity = $3 WHERE id = $1 AND shop_id = $2',
+                    value: [req.body.product_id[i], req.body.shop_id[i], newQantity]
+                }
+    
+                pool.query(updateQuantity.text, updateQuantity.value).then((results) => {
+                    console.log(results);
+                    if(results.rowCount > 0){
+                        p++;
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                    return res.status(500).json({ message: 'Update quantity - Internal Server Error' });
+                });
+    
             }).catch((err) => {
                 console.log(err);
-                return res.status(500).json({ message: 'Update quantity - Internal Server Error' });
+                return res.status(500).json({ message: 'Check product - Internal Server Error' });
             });
+        }
 
-        }).catch((err) => {
-            console.log(err);
-            return res.status(500).json({ message: 'Check product - Internal Server Error' });
-        });
+       setTimeout(() => {
+        console.log("Value of p -> ", p);
+        if(p > 0){
+            
+            pool.query(salesQuery.text, salesQuery.value).then((success) => {
+    
+                if(success.rowCount > 0){
+                    return res.status(200).json({ message: "Check out successful!" });
+                } else{
+                    return res.status(400).json({ message: "Failed to save sales!" });
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
+        } else{
+            return res.status(404).json({ message: "Internal Server Error"});    
+        }
+       }, 5000)
+
     }).catch((err) => {
         console.log(err);
         return res.status(500).json({ message: 'Check address - Internal Server Error' });

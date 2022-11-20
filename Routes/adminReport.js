@@ -9,4 +9,7 @@ router.get('/generate-user-report/:user_id', reportController.userReport);
 //Generate a product report
 router.get('/generate-product-report', reportController.productReport);
 
+//Generate a sales report
+router.get('/generate-sales-report', reportController.salesReport);
+
 module.exports = router;

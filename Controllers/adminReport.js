@@ -58,7 +58,7 @@ module.exports.salesReport = (req, res) => {
 
     let data = []
     let query = {
-        text: 'select product_id, shop_id, quantity from orders'
+        text: 'select product_id, shop_id, quantity, totalDue from orders'
     }
 
     pool.query(query.text).then(async (result) => {
@@ -97,7 +97,8 @@ module.exports.salesReport = (req, res) => {
                     data.push({
                         quantity: result.rows[i].quantity,
                         shop_name: shop_name,
-                        product_name: product_name
+                        product_name: product_name,
+                        totalDue: result.rows[i].totalDue
                     });
                 }, 6000)
             }

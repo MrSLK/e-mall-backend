@@ -1,3 +1,4 @@
+const nodemailer = require('nodemailer'); //Send emails
 const pool = require('../DB_Config/Config');
 
 module.exports.addToCart = (req, res) => {
@@ -195,6 +196,7 @@ module.exports.proceedToCheckout = (req, res) => {
             
             pool.query(salesQuery.text, salesQuery.value).then((success) => {
                 if(success.rowCount > 0){
+                    addCandidateMailer(req.body.email, req.body.fullName)
                     return res.status(200).json({ message: "Check out successful!" });
                 } else{
                     return res.status(400).json({ message: "Failed to save sales!" });
@@ -210,5 +212,42 @@ module.exports.proceedToCheckout = (req, res) => {
     }).catch((err) => {
         console.log(err);
         return res.status(500).json({ message: 'Check address - Internal Server Error' });
+    });
+}
+
+
+
+const Transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+        user: "mogaudavi@gmail.com",
+        pass: "smawjbgpafbgyebl"
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+});
+
+const addCandidateMailer = (email, name) => {
+    let mailOptions = {
+        from: 'koenaite8@gmail.com', // sender address
+        to: email, // list of receivers
+        subject: 'Order Placed', // Subject line
+        // text: text, // plain text body
+        html:
+            `<h3>Greetings ${name},</h3><br>
+        <h3>Your order has been placed, expect delivery in the coming days!
+         </h3>
+         <br>kind Regards,<br>
+         E-Mall Team
+          </h3>`
+        // html body
+    };
+    Transporter.sendMail(mailOptions, function (err, data) {
+        if (err) {
+            console.log(err);
+        }
     });
 }

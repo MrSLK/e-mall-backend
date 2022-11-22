@@ -65,6 +65,7 @@ module.exports.salesReport = (req, res) => {
 
         let shop_name = [], product_name = []
         if (result.rowCount > 0) {
+            console.log(result);
 
             for (let i = 0; i < result.rowCount; i++) {
                 let  product_id = result.rows[i].product_id, shop_id = result.rows[i].shop_id;

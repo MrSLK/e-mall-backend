@@ -140,8 +140,9 @@ module.exports.getOneProduct = (req, res) => {
         shop.name AS shop
         from product, shop 
         WHERE product.shop_id = shop.id 
-        AND product.id = $1 `,
-        value: [req.body.product_id]
+        AND product.name = $1
+        AND product.id = $2`,
+        value: [req.body.product_name, req.body.product_id]
     }
 
     pool.query(query.text, query.value).then((response) => {
@@ -161,9 +162,9 @@ module.exports.getOneProduct = (req, res) => {
         from product, shop 
         WHERE product.shop_id = shop.id 
         AND product.shop_id != $1 
-        AND product.price < $3
-        AND product.category_id = $2`,
-        value: [req.body.shop_id, req.body.category_id, response.rows[0].price]
+        AND product.price < $2
+        AND product.name = $3`,
+        value: [req.body.shop_id, response.rows[0].price, response.rows[0].product]
     }
 
         if (response.rowCount > 0) {
@@ -186,7 +187,7 @@ module.exports.getOneProduct = (req, res) => {
                         quantity_left: result.rows[0].quantity,
                         picture_url: result.rows[0].picture_url,
                         category_id: result.rows[0].category_id,
-                        shop_name: result.rows[0].shop_name
+                        shop: result.rows[0].shop_name
                     }
                 }
 

@@ -4,7 +4,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
 
 jobs:
-  build_and_test:
+  test:
     executor: node/default
     steps:
       - checkout
@@ -13,9 +13,6 @@ jobs:
       - run:
           command: yarn test
           name: Run tests
-      - run:
-          command: yarn build
-          name: Build app
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -32,10 +29,8 @@ jobs:
 workflows:
   test_my_app:
     jobs:
-      - build_and_test
+      - test
       - deploy:
-          requires:
-            - build_and_test # only deploy if the build_and_test job has completed
           filters:
             branches:
               only: master # only deploy when on main

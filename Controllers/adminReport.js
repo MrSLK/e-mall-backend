@@ -123,3 +123,65 @@ module.exports.salesReport = (req, res) => {
         return res.status(400).json({ message: 'Internal Server Error' })
     });
 }
+
+module.exports.salesReportObject = (req, res) => {
+
+    let data = []
+    let query = {
+        text: 'select product_id, shop_id, quantity, totalDue from orders'
+    }
+
+    pool.query(query.text).then(async (result) => {
+
+        let shop_name = [], product_name = []
+        if (result.rowCount > 0) {
+            console.log(result);
+
+            for (let i = 0; i < result.rowCount; i++) {
+                let  product_id = result.rows[i].product_id, shop_id = result.rows[i].shop_id;
+                setTimeout(() => {
+
+                    let productNameQuery = {
+                        text: 'select name from product where id = ANY($1)',
+                        value: [product_id]
+                    }
+
+                    pool.query(productNameQuery.text, productNameQuery.value).then((results) => {
+                        console.log(results.rows);
+                        product_name.push(results.rows);
+                    }).catch((error) => {
+                        console.log(error);
+                    })
+
+                    let shopNameQuery = {
+                        text: 'select name from shop where id = ANY($1)',
+                        value: [shop_id]
+                    }
+
+                    pool.query(shopNameQuery.text, shopNameQuery.value).then((success) => {
+                        console.log(success.rows);
+                        shop_name.push(success.rows);
+                    }).catch((error) => {
+                        console.log(error);
+                    })
+
+                    data.push({
+                        quantity: result.rows[i].quantity,
+                        shop_name: shop_name,
+                        product_name: product_name,
+                        totalDue: result.rows[i].totalDue
+                    });
+                }, 6000)
+            }
+
+            setTimeout(async () => {            
+            return res.status(200).json(data)
+        }, 10000)
+        } else {
+            return res.status(200).json({ message: 'No products found' });
+        }
+    }).catch((err) => {
+        console.log(err);
+        return res.status(400).json({ message: 'Internal Server Error' })
+    });
+}

@@ -10,7 +10,6 @@ module.exports.userReport = (req, res) => {
     }
 
     pool.query(query.text, query.value).then(async (result) => {
-        console.log(result);
         if (result.rowCount > 0) {
             let data = result.rows;
             const csv = new ObjectsToCsv(data);
@@ -35,7 +34,6 @@ module.exports.productReport = (req, res) => {
     }
 
     pool.query(query.text).then(async (result) => {
-        console.log(result);
         if (result.rowCount > 0) {
             let data = result.rows;
             const csv = new ObjectsToCsv(data);
@@ -65,7 +63,7 @@ module.exports.salesReport = (req, res) => {
 
         let shop_name = [], product_name = []
         if (result.rowCount > 0) {
-            console.log(result);
+            console.log(result.rows);
 
             for (let i = 0; i < result.rowCount; i++) {
                 let  product_id = result.rows[i].product_id, shop_id = result.rows[i].shop_id;

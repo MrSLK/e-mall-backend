@@ -36,7 +36,6 @@ module.exports.getMalls = (req, res) => {
     }
 
     pool.query(query.text).then((response) => {
-        console.log(response);
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows);
         } else {

@@ -17,7 +17,6 @@ module.exports.createCategory = (req, res) => {
             return res.status(400).json({error: 'Category already exists!'});
         } else {
             pool.query(query.text, query.value).then((response) => {
-            console.log(response);
             if (response.rowCount > 0) {
                 return res.status(200).json({ msg: 'Category created successfully'});
             } else {
@@ -37,7 +36,6 @@ module.exports.getAllCategories = (req, res) => {
     }
 
     pool.query(query.text).then((response) => {
-        console.log(response);
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows);
         } else {
@@ -56,7 +54,6 @@ module.exports.getCategoriesOfShop = (req, res) => {
     }
 
     pool.query(query.text).then((response) => {
-        console.log(response);
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows);
         } else {

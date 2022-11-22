@@ -3,8 +3,6 @@ const pool = require('../DB_Config/Config');
 
 module.exports.addToCart = (req, res) => {
 
-    console.log(req.body);
-
     let product_status = 'in-cart';
 
     let newQuery = {
@@ -25,7 +23,6 @@ module.exports.addToCart = (req, res) => {
                 }
 
                 pool.query(query.text, query.value).then((response) => {
-                    console.log("From insterting to cart:", response);
                     if (response.rowCount > 0) {
 
                         if (response.rows[0].quantity < req.body.quantity) {
@@ -175,7 +172,6 @@ module.exports.proceedToCheckout = (req, res) => {
                 }
     
                 pool.query(updateQuantity.text, updateQuantity.value).then((results) => {
-                    console.log(results);
                     if(results.rowCount > 0){
                         p++;
                     }
@@ -191,7 +187,6 @@ module.exports.proceedToCheckout = (req, res) => {
         }
 
        setTimeout(() => {
-        console.log("Value of p -> ", p);
         if(p > 0){
             
             pool.query(salesQuery.text, salesQuery.value).then((success) => {

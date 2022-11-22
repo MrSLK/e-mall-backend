@@ -3,7 +3,6 @@ const {cloudinary} = require('../Cloudinary/cloudinary');
 const fs = require('fs');
 
 module.exports.uploadPictureToCloudinary = async (req, res, next) => {
-    console.log(req.file);
     try {
         var  product_url;
         if (req.file) {
@@ -114,7 +113,6 @@ module.exports.getAllProductsOfAShop = (req, res) => {
     }
 
     pool.query(query.text, query.value).then((response => {
-        console.log(response);
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows)
         } else {
@@ -146,8 +144,6 @@ module.exports.getOneProduct = (req, res) => {
     }
 
     pool.query(query.text, query.value).then((response) => {
-        console.log("response", response.rows);
-        
 
     let cheaperQuery = {
         text: `select product.id, 
@@ -169,7 +165,7 @@ module.exports.getOneProduct = (req, res) => {
 
         if (response.rowCount > 0) {
             pool.query(cheaperQuery.text, cheaperQuery.value).then((result) => {
-                console.log("result", result.rows);
+                
                 let object = {
                     id: response.rows[0].id,
                     name: response.rows[0].product,

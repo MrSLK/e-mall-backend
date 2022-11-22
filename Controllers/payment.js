@@ -1,5 +1,4 @@
 const pool = require('../DB_Config/Config');
-
 const Moment = require('moment');
 const MomentRange = require('moment-range');
 const moment = MomentRange.extendMoment(Moment);
@@ -81,8 +80,6 @@ module.exports.saveCard = (req, res) => {
 
     let exp_date = req.body.exp_date;
     let exp_month = exp_date.substring(0, exp_date.indexOf("/")), exp_year = exp_date.substring(exp_date.indexOf("/") + 1)
-    console.log("exp_month ->", exp_month);
-    console.log("exp_year ->", exp_year);
 
     let query = {
         text: 'INSERT INTO cards (card_number, exp_month, exp_year, cvv, user_id) VALUES ($1, $2, $3, $4, $5)',

@@ -75,7 +75,6 @@ module.exports.salesReport = (req, res) => {
                     }
 
                     pool.query(productNameQuery.text, productNameQuery.value).then((results) => {
-                        console.log(results.rows);
                         product_name.push(results.rows);
                     }).catch((error) => {
                         console.log(error);
@@ -87,7 +86,6 @@ module.exports.salesReport = (req, res) => {
                     }
 
                     pool.query(shopNameQuery.text, shopNameQuery.value).then((success) => {
-                        console.log(success.rows);
                         shop_name.push(success.rows);
                     }).catch((error) => {
                         console.log(error);
@@ -103,8 +101,7 @@ module.exports.salesReport = (req, res) => {
             }
 
             setTimeout(async () => {            
-
-
+                console.log(data);
             // return res.status(200).json(data)
             const csv = new ObjectsToCsv(data);
 

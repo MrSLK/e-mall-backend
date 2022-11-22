@@ -145,7 +145,7 @@ module.exports.getOneProduct = (req, res) => {
 
     pool.query(query.text, query.value).then((response) => {
 
-        console.log(response.rows);
+        console.log("Line 148 ->",response.rows);
     let cheaperQuery = {
         text: `select product.id, 
         product.name AS product_name, 

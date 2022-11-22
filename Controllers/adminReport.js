@@ -56,7 +56,7 @@ module.exports.salesReport = (req, res) => {
 
     let data = []
     let query = {
-        text: 'select product_id, shop_id, quantity, totalDue from orders'
+        text: 'select product_id, shop_id, quantity, totaldue from orders'
     }
 
     pool.query(query.text).then(async (result) => {
@@ -97,7 +97,7 @@ module.exports.salesReport = (req, res) => {
                         quantity: result.rows[i].quantity,
                         shop_name: shop_name,
                         product_name: product_name,
-                        totalDue: result.rows[i].totalDue
+                        totaldue: result.rows[i].totaldue
                     });
                 }, 6000)
             }
@@ -127,7 +127,7 @@ module.exports.salesReportObject = (req, res) => {
 
     let data = []
     let query = {
-        text: 'select product_id, shop_id, quantity, totalDue from orders'
+        text: 'select product_id, shop_id, quantity, totaldue from orders'
     }
 
     pool.query(query.text).then(async (result) => {
@@ -168,7 +168,7 @@ module.exports.salesReportObject = (req, res) => {
                         quantity: result.rows[i].quantity,
                         shop_name: shop_name,
                         product_name: product_name,
-                        totalDue: result.rows[i].totalDue
+                        totaldue: result.rows[i].totaldue
                     });
                 }, 6000)
             }

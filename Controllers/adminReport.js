@@ -76,18 +76,30 @@ module.exports.salesReport = (req, res) => {
     let data = {}
     let obj = []
     let query = {
-        text: 'select product_id, shop_id, quantity, totaldue from orders'
+        text: 'select product_id, shop_id, quantity, totaldue, user_id from orders'
     }
+    
 
     pool.query(query.text).then(async (result) => {
 
-        let shop_name = [], product_name = [], quantity = [], totaldue = []
+        let shop_name = [], product_name = [], quantity = [], totaldue = [], customer = []
         if (result.rowCount > 0) {
 
             for (let i = 0; i < result.rows.length; i++) {
 
                 quantity[i] = result.rows[i].quantity
                 totaldue[i] = result.rows[i].totaldue
+
+                let nameQuery = {
+                    text: `SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM users WHERE id = $1`,
+                    value: [result.rows[i].user_id]
+                }
+                
+                await pool.query(nameQuery.text, nameQuery.value).then((allNames) => {
+                    customer[i] = allNames.rows[0].full_name
+                }).catch((err) =>{
+                    console.log(err);
+                })
 
                 let productNameQuery = {
                     text: 'select name from product where id = ANY($1)',
@@ -124,6 +136,7 @@ module.exports.salesReport = (req, res) => {
                 data.shop_name = shop_name
                 data.quantity = quantity
                 data.totaldue = totaldue
+                data.customer = customer
                 
                 let newObj = []
                 for (let a = 0; a < data.product_name.length; a++){
@@ -131,7 +144,8 @@ module.exports.salesReport = (req, res) => {
                         product: data.product_name[a],
                         shop: data.shop_name[a],
                         quantity: data.quantity[a],
-                        total: data.totaldue[a]
+                        total: data.totaldue[a],
+                        customer: data.customer[a]
                     }
                 }
                 

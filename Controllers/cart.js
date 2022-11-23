@@ -160,7 +160,7 @@ module.exports.proceedToCheckout = (req, res) => {
             }
 
             pool.query(query.text, query.value).then(async (response) => {
-                
+                console.log(response);
                 if (quantity[i] > response.rows[0].quantity) {
                     return res.status(400).json({ message: "We don't have enough stock for this purchase!" });
                 }

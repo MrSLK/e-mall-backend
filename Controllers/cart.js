@@ -154,6 +154,7 @@ module.exports.proceedToCheckout = (req, res) => {
 
         console.log(req.body);
         for (let i = 0; i < product_id.length; i++) {
+            
             let query = {
                 text: 'SELECT quantity FROM product WHERE id = $1 AND shop_id = $2',
                 value: [req.body.product_id[i], req.body.shop_id[i]]

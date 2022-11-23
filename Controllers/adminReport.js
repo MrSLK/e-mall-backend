@@ -54,63 +54,82 @@ module.exports.productReport = (req, res) => {
 
 module.exports.salesReport = (req, res) => {
 
-    let data = []
+    let data = {}
+    let obj = []
     let query = {
         text: 'select product_id, shop_id, quantity, totaldue from orders'
     }
 
     pool.query(query.text).then(async (result) => {
 
-        let shop_name = [], product_name = []
+        let shop_name = [], product_name = [], quantity = [], totaldue = []
         if (result.rowCount > 0) {
-            console.log(result.rows);
 
-            for (let i = 0; i < result.rowCount; i++) {
-                let  product_id = result.rows[i].product_id, shop_id = result.rows[i].shop_id;
-                setTimeout(() => {
+            for (let i = 0; i < result.rows.length; i++) {
 
-                    let productNameQuery = {
-                        text: 'select name from product where id = ANY($1)',
-                        value: [product_id]
+                quantity[i] = result.rows[i].quantity
+                totaldue[i] = result.rows[i].totaldue
+                
+                console.log(`Loop ${i}->`, result.rows[i]);
+
+                let productNameQuery = {
+                    text: 'select name from product where id = ANY($1)',
+                    value: [result.rows[i].product_id]
+                }
+
+
+                await pool.query(productNameQuery.text, productNameQuery.value).then((results) => {
+                    for (let x = 0; x < results.rows.length; x++) {
+                        product_name[i] = results.rows
                     }
+                }).catch((err) => {
+                    console.log(err);
+                })
 
-                    pool.query(productNameQuery.text, productNameQuery.value).then((results) => {
-                        product_name.push(results.rows);
-                    }).catch((error) => {
-                        console.log(error);
-                    })
+                //For Shop
 
-                    let shopNameQuery = {
-                        text: 'select name from shop where id = ANY($1)',
-                        value: [shop_id]
+                let shopNameQuery = {
+                    text: 'select name from shop where id = ANY($1)',
+                    value: [result.rows[i].shop_id]
+                }
+                await pool.query(shopNameQuery.text, shopNameQuery.value).then((success) => {
+                    console.log(`Loop still ${i}`, success.rows);
+                    for (let x = 0; x < success.rows.length; x++) {
+                        shop_name[i] = success.rows
                     }
-
-                    pool.query(shopNameQuery.text, shopNameQuery.value).then((success) => {
-                        shop_name.push(success.rows);
-                    }).catch((error) => {
-                        console.log(error);
-                    })
-
-                    data.push({
-                        quantity: result.rows[i].quantity,
-                        shop_name: shop_name,
-                        product_name: product_name,
-                        totaldue: result.rows[i].totaldue
-                    });
-                }, 6000)
+                }).catch((err) => {
+                    console.log(err);
+                })
             }
 
-            setTimeout(async () => {            
+            setTimeout(async () => {   
+                    
+                data.product_name = product_name
+                data.shop_name = shop_name
+                data.quantity = quantity
+                data.totaldue = totaldue
+
                 console.log(data);
-            // return res.status(200).json(data)
-            const csv = new ObjectsToCsv(data);
+                let newObj = []
+                for (let a = 0; a < data.product_name.length; a++){
+                    newObj[a] ={
+                        product: data.product_name[a],
+                        shop: data.shop_name[a],
+                        quantity: data.quantity[a],
+                        total: data.totaldue[a]
+                    }
+                }
+                console.log(newObj);
+                // return res.status(200).json(data)
+                const csv = new ObjectsToCsv(newObj);
 
-            // Save to file:
-            await csv.toDisk('./sales.csv');
+                // Save to file:
+                await csv.toDisk('./sales.csv');
 
-            // return res.status(201).json({sales: result.rows});
-            return res.download("./sales.csv")
-        }, 10000)
+                // return res.status(201).json({sales: result.rows});
+                return res.download("./sales.csv")
+            }, 10000)
+
         } else {
             return res.status(200).json({ message: 'No products found' });
         }
@@ -134,7 +153,7 @@ module.exports.salesReportObject = (req, res) => {
             console.log(result);
 
             for (let i = 0; i < result.rowCount; i++) {
-                let  product_id = result.rows[i].product_id, shop_id = result.rows[i].shop_id;
+                let product_id = result.rows[i].product_id, shop_id = result.rows[i].shop_id;
                 setTimeout(() => {
 
                     let productNameQuery = {
@@ -170,9 +189,9 @@ module.exports.salesReportObject = (req, res) => {
                 }, 6000)
             }
 
-            setTimeout(async () => {            
-            return res.status(200).json(data)
-        }, 10000)
+            setTimeout(async () => {
+                return res.status(200).json(data)
+            }, 10000)
         } else {
             return res.status(200).json({ message: 'No products found' });
         }

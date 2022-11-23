@@ -156,7 +156,6 @@ module.exports.salesReport = (req, res) => {
 
 module.exports.salesReportObject = (req, res) => {
     let data = {}
-    let obj = []
     let query = {
         text: 'select product_id, shop_id, quantity, totaldue from orders'
     }

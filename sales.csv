@@ -1,9 +1,9 @@
-product,shop,quantity,total,customer
-"[{""name"":""Apple iPad Pro""},{""name"":""Honor VS Cognac""}]","[{""name"":""Game Liquior""},{""name"":""iStore""}]","[1,1]",21618,Jane Fitz
-"[{""name"":""Apple iPad Pro""},{""name"":""Honor VS Cognac""}]","[{""name"":""Game Liquior""},{""name"":""iStore""}]","[1,1]",21618,Jane Fitz
-"[{""name"":""ASUS ZenBook 14""},{""name"":""Dell XPS 13 Plus""}]","[{""name"":""Game""},{""name"":""Incredible Connection""}]","[1,1]",41097,Jane Fitz
-"[{""name"":""WOMEN'S PRINTED HOTPANTS""}]","[{""name"":""Totalsports""}]",[1],348.95,Jane Fitz
-"[{""name"":""WOMEN'S PRINTED HOTPANTS""},{""name"":""WOMEN'S RED VEST""},{""name"":""Honor VS Cognac""}]","[{""name"":""Spar Liquior""},{""name"":""Sportscene""}]","[1,1,1]",3194.83,Jane Fitz
-"[{""name"":""Sony Alpha a7R IV Mirrorless""}]","[{""name"":""Incredible Connection""}]",[1],50098.99,Mavis Masemola
-"[{""name"":""Houndstooth Blouse""},{""name"":""Mens Chino Shorts""},{""name"":""WOMEN'S RED VEST""}]","[{""name"":""Markham""},{""name"":""Sportscene""}]","[1,1,1]",553.95,Mavis Masemola
-"[{""name"":""Houndstooth Blouse""},{""name"":""Mens Chino Shorts""},{""name"":""WOMEN'S RED VEST""}]","[{""name"":""Markham""},{""name"":""Sportscene""}]","[1,1,1]",553.95,Mavis Masemola
+product,shop,quantity,total
+"[{""name"":""Apple iPad Pro""},{""name"":""Honor VS Cognac""}]","[{""name"":""Game Liquior""},{""name"":""iStore""}]","[1,1]",21618
+"[{""name"":""Apple iPad Pro""},{""name"":""Honor VS Cognac""}]","[{""name"":""Game Liquior""},{""name"":""iStore""}]","[1,1]",21618
+"[{""name"":""ASUS ZenBook 14""},{""name"":""Dell XPS 13 Plus""}]","[{""name"":""Game""},{""name"":""Incredible Connection""}]","[1,1]",41097
+"[{""name"":""WOMEN'S PRINTED HOTPANTS""}]","[{""name"":""Totalsports""}]",[1],348.95
+"[{""name"":""WOMEN'S PRINTED HOTPANTS""},{""name"":""WOMEN'S RED VEST""},{""name"":""Honor VS Cognac""}]","[{""name"":""Spar Liquior""},{""name"":""Sportscene""}]","[1,1,1]",3194.83
+"[{""name"":""Sony Alpha a7R IV Mirrorless""}]","[{""name"":""Incredible Connection""}]",[1],50098.99
+"[{""name"":""Houndstooth Blouse""},{""name"":""Mens Chino Shorts""},{""name"":""WOMEN'S RED VEST""}]","[{""name"":""Markham""},{""name"":""Sportscene""}]","[1,1,1]",553.95
+"[{""name"":""Houndstooth Blouse""},{""name"":""Mens Chino Shorts""},{""name"":""WOMEN'S RED VEST""}]","[{""name"":""Markham""},{""name"":""Sportscene""}]","[1,1,1]",553.95

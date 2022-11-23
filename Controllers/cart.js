@@ -146,7 +146,7 @@ module.exports.proceedToCheckout = (req, res) => {
         value: [req.body.user_id, req.body.product_id, req.body.shop_id, req.body.quantity, req.body.totalDue]
     }
 
-    pool.query(addressStatus.text, addressStatus.values).then((result) => {
+    pool.query(addressStatus.text, addressStatus.values).then(async (result) => {
 
         if (result.rows[0].address == null) {
             return res.status(400).json({ message: "Address cannot be null. Please update your address!" });
@@ -159,7 +159,7 @@ module.exports.proceedToCheckout = (req, res) => {
                 value: [req.body.product_id[i], req.body.shop_id[i]]
             }
 
-            pool.query(query.text, query.value).then((response) => {
+            await pool.query(query.text, query.value).then((response) => {
                 
                 if (quantity[i] > response.rows[0].quantity) {
                     return res.status(400).json({ message: "We don't have enough stock for this purchase!" });

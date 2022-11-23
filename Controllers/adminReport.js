@@ -52,6 +52,25 @@ module.exports.productReport = (req, res) => {
     });
 }
 
+module.exports.productReportObject = (req, res) => {
+
+    let query = {
+        text: 'select name, description, price, quantity, created_at from product'
+    }
+
+    pool.query(query.text).then(async (result) => {
+        if (result.rowCount > 0) {
+            let data = result.rows;
+            return res.status(200).json(data)
+        } else {
+            return res.status(200).json({ message: 'No products found' });
+        }
+    }).catch((err) => {
+        console.log(err);
+        return res.status(400).json({ message: 'Internal Server Error' })
+    });
+}
+
 module.exports.salesReport = (req, res) => {
 
     let data = {}

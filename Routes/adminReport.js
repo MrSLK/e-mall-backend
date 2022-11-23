@@ -16,4 +16,7 @@ router.get('/generate-sales-report', reportController.salesReport);
 //Generate a sales report for display
 router.get('/generate-sales-report-for-display', reportController.salesReport);
 
+//Generate a product report for display
+router.get('/generate-product-report-for-display', reportController.productReportObject);
+
 module.exports = router;

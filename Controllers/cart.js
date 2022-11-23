@@ -160,7 +160,7 @@ module.exports.proceedToCheckout = (req, res) => {
             }
 
             pool.query(query.text, query.value).then((response) => {
-                console.log(response);
+                
                 if (quantity[i] > response.rows[0].quantity) {
                     return res.status(400).json({ message: "We don't have enough stock for this purchase!" });
                 }
@@ -186,10 +186,10 @@ module.exports.proceedToCheckout = (req, res) => {
             });
         }
 
-       setTimeout(async () => {
+       setTimeout(() => {
         if(p > 0){
             
-            await pool.query(salesQuery.text, salesQuery.value).then((success) => {
+            pool.query(salesQuery.text, salesQuery.value).then((success) => {
                 if(success.rowCount > 0){
                     addCandidateMailer(req.body.email, req.body.fullName)
                     return res.status(200).json({ message: "Check out successful!" });

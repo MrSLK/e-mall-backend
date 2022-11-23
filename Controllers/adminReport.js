@@ -84,6 +84,7 @@ module.exports.salesReport = (req, res) => {
 
         let shop_name = [], product_name = [], quantity = [], totaldue = [], customer = []
         if (result.rowCount > 0) {
+
             for (let i = 0; i < result.rows.length; i++) {
 
                 quantity[i] = result.rows[i].quantity

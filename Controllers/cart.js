@@ -158,7 +158,6 @@ module.exports.proceedToCheckout = (req, res) => {
                 text: 'SELECT quantity FROM product WHERE id = $1 AND shop_id = $2',
                 value: [req.body.product_id[i], req.body.shop_id[i]]
             }
-
             await pool.query(query.text, query.value).then(async (response) => {
                 console.log("Line 163",response.rows);
                 if (req.body.quantity[i] > response.rows[0].quantity) {

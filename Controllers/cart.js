@@ -134,7 +134,7 @@ module.exports.removeFromCart = (req, res) => {
 
 module.exports.proceedToCheckout = (req, res) => {
 
-    let prod_quantity = 0, p = 0, quantity = req.body.quantity, product_id = req.body.product_id, shop_id = req.body.Shop_id, newQantity, totalDue = req.body.totalDue;
+    let prod_quantity = 0, p = 0, quantity = req.body.quantity, product_id = req.body.product_id, shop_id = req.body.shop_id, newQantity, totalDue = req.body.totalDue;
 
     let addressStatus = {
         text: 'SELECT address FROM users WHERE id = $1',
@@ -152,15 +152,16 @@ module.exports.proceedToCheckout = (req, res) => {
             return res.status(400).json({ message: "Address cannot be null. Please update your address!" });
         }
 
+        console.log(req.body);
         for (let i = 0; i < product_id.length; i++) {
             let query = {
                 text: 'SELECT quantity FROM product WHERE id = $1 AND shop_id = $2',
                 value: [req.body.product_id[i], req.body.shop_id[i]]
             }
 
-            await pool.query(query.text, query.value).then((response) => {
-                
-                if (quantity[i] > response.rows[0].quantity) {
+            await pool.query(query.text, query.value).then(async (response) => {
+                console.log("Line 163",response.rows);
+                if (req.body.quantity[i] > response.rows[0].quantity) {
                     return res.status(400).json({ message: "We don't have enough stock for this purchase!" });
                 }
                 newQantity = response.rows[0].quantity - prod_quantity;
@@ -170,7 +171,7 @@ module.exports.proceedToCheckout = (req, res) => {
                     value: [req.body.product_id[i], req.body.shop_id[i], newQantity]
                 }
     
-                pool.query(updateQuantity.text, updateQuantity.value).then((results) => {
+                await pool.query(updateQuantity.text, updateQuantity.value).then((results) => {
                     if(results.rowCount > 0){
                         p++;
                     }

@@ -79,8 +79,6 @@ module.exports.proceedToCheckout = (req, res) => {
     });
 }
 
-
-
 const Transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,

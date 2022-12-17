@@ -1,44 +1,4 @@
 const pool = require('../DB_Config/Config');
-const {cloudinary} = require('../Cloudinary/cloudinary');
-const fs = require('fs');
-
-module.exports.uploadPictureToCloudinary = async (req, res, next) => {
-    try {
-        var  product_url;
-        if (req.file) {
-            if(req.file.size > 10485760){
-                return res.status(400).send({msg:"size too large"});
-            }
-            if(!req.file.mimetype === 'image/jpeg' || !req.file.mimetype === '	image/ief' ){
-                return res.status(400).send({msg:"wrong file format, expected jpeg/jpg"});
-            }
-
-             product_url = req.file.path ? req.file.path : "";
-    
-        }
-        const uploadResponse = await cloudinary.uploader.upload(product_url, {
-            folder: 'products',
-            resource_type: 'auto',
-            use_filename: true
-        });
-
-        const path = product_url;
-        fs.unlinkSync(path);
-        //take cloudinary response and get url set cert_url to cloudinary url
-
-        let object = {
-            picture_url : uploadResponse.url,
-            name: req.file.originalname
-        }
-
-        return res.status(201).json(object);
-
-
-    } catch (error) {
-        console.log("This error:",error);
-       next(error);
-    }
-}
 
 module.exports.createProduct = (req, res) => {
     //Save upload response to the db

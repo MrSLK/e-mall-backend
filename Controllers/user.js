@@ -7,7 +7,8 @@ const generateToken = (payload) => {
     return jwt.sign({user_details: payload}, 'w', { expiresIn: '3h'})   // *issue: setting secret to .env.JWT_SECRET == undefined
 }
 
-//Usr registration
+//User registration
+//Must use JOI package for user registration validation 
 module.exports.registration = (req, res) => {
     
     let account_status = true;

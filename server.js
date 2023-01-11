@@ -8,7 +8,6 @@ const shopRoute = require('./Routes/shop');
 const mallRoute = require('./Routes/mall');
 const paymentRoute = require('./Routes/payment');
 const productRoute = require('./Routes/product');
-const addressRoute = require('./Routes/address');
 const adminReportRoute = require('./Routes/adminReport');
 const orderHistoryRoute = require('./Routes/orderHistory');
 
@@ -33,13 +32,12 @@ app.use('/mall', mallRoute);
 app.use('/cart', cartRoute);
 app.use('/shop', shopRoute);
 app.use('/product', productRoute);
-app.use('/address', addressRoute);
 app.use('/payment', paymentRoute);
 app.use('/product', productRoute);
 app.use('/report', adminReportRoute);
 app.use('/order', orderHistoryRoute);
 
 app.listen(PORT, HOST, ()=>{
-    console.log('server is listening to port ', PORT);
+    console.log('server is listening to port http://localhost:', PORT);
 })
 

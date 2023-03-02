@@ -1,18 +1,17 @@
 const pool = require('../DB_Config/Config');
 
 module.exports.orderHistory = (req, res) => {
-    console.log(req.body);
 
     let query = {
         text: 'select product_id, shop_id, quantity, totalDue from orders where user_id = $1',
         value: [req.body.user_id]
     }
-    
+
     pool.query(query.text, query.value).then((result) => {
-        
+
         let shop_name = [], product_name = []
         let data = []
-        console.log(result.rows);
+        
         if (result.rowCount > 0) {
 
             for (let i = 0; i < result.rowCount; i++) {
@@ -48,7 +47,6 @@ module.exports.orderHistory = (req, res) => {
                     });
 
                 }
-                console.log(data);
                 return res.status(200).json({data});
         }
     }).catch((err) => {

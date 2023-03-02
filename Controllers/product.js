@@ -1,45 +1,4 @@
 const pool = require('../DB_Config/Config');
-const {cloudinary} = require('../Cloudinary/cloudinary');
-const fs = require('fs');
-
-module.exports.uploadPictureToCloudinary = async (req, res, next) => {
-    console.log(req.file);
-    try {
-        var  product_url;
-        if (req.file) {
-            if(req.file.size > 10485760){
-                return res.status(400).send({msg:"size too large"});
-            }
-            if(!req.file.mimetype === 'image/jpeg' || !req.file.mimetype === '	image/ief' ){
-                return res.status(400).send({msg:"wrong file format, expected jpeg/jpg"});
-            }
-
-             product_url = req.file.path ? req.file.path : "";
-    
-        }
-        const uploadResponse = await cloudinary.uploader.upload(product_url, {
-            folder: 'products',
-            resource_type: 'auto',
-            use_filename: true
-        });
-
-        const path = product_url;
-        fs.unlinkSync(path);
-        //take cloudinary response and get url set cert_url to cloudinary url
-
-        let object = {
-            picture_url : uploadResponse.url,
-            name: req.file.originalname
-        }
-
-        return res.status(201).json(object);
-
-
-    } catch (error) {
-        console.log("This error:",error);
-       next(error);
-    }
-}
 
 module.exports.createProduct = (req, res) => {
     //Save upload response to the db
@@ -114,7 +73,6 @@ module.exports.getAllProductsOfAShop = (req, res) => {
     }
 
     pool.query(query.text, query.value).then((response => {
-        console.log(response);
         if (response.rowCount > 0) {
             return res.status(200).json(response.rows)
         } else {
@@ -140,14 +98,20 @@ module.exports.getOneProduct = (req, res) => {
         shop.name AS shop
         from product, shop 
         WHERE product.shop_id = shop.id 
-        AND product.id = $1 `,
-        value: [req.body.product_id]
+        AND product.name = $1
+        AND product.id = $2`,
+        value: [req.body.product_name, req.body.product_id]
     }
 
     pool.query(query.text, query.value).then((response) => {
+<<<<<<< HEAD
         console.log("response", response.rows);
         
 
+=======
+
+        console.log("Line 148 ->",response.rows);
+>>>>>>> bd37ed7327205efea9c5933fbba6a8f057415ce0
     let cheaperQuery = {
         text: `select product.id, 
         product.name AS product_name, 
@@ -161,13 +125,21 @@ module.exports.getOneProduct = (req, res) => {
         from product, shop 
         WHERE product.shop_id = shop.id 
         AND product.shop_id != $1 
+<<<<<<< HEAD
         AND product.price < $3
         AND product.category_id = $2`,
         value: [req.body.shop_id, req.body.category_id, response.rows[0].price]
     }
+=======
+        AND product.price < $2
+        AND product.name = $3`,
+        value: [req.body.shop_id, response.rows[0].price, response.rows[0].product]
+    }
+
+>>>>>>> bd37ed7327205efea9c5933fbba6a8f057415ce0
         if (response.rowCount > 0) {
             pool.query(cheaperQuery.text, cheaperQuery.value).then((result) => {
-                console.log("result", result.rows);
+                
                 let object = {
                     id: response.rows[0].id,
                     name: response.rows[0].product,
@@ -185,7 +157,7 @@ module.exports.getOneProduct = (req, res) => {
                         quantity_left: result.rows[0].quantity,
                         picture_url: result.rows[0].picture_url,
                         category_id: result.rows[0].category_id,
-                        shop_name: result.rows[0].shop_name
+                        shop: result.rows[0].shop_name
                     }
                 }
 

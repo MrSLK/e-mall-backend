@@ -7,10 +7,9 @@ const generateToken = (payload) => {
     return jwt.sign({user_details: payload}, 'w', { expiresIn: '3h'})   // *issue: setting secret to .env.JWT_SECRET == undefined
 }
 
-//Usr registration
+//User registration
+//Must use JOI package for user registration validation 
 module.exports.registration = (req, res) => {
-
-    console.log(req.body);
     
     let account_status = true;
     let address = null;
@@ -151,7 +150,6 @@ module.exports.updateProfile = (req, res) => {
     }
 
     pool.query(query.text, query.value).then(response => {
-        console.log(response);
         if(response.rowCount > 0) {
             return res.status(200).json({ success: true })
         } else {
@@ -171,14 +169,13 @@ module.exports.getUsers = (req, res) => {
     }
 
     pool.query(query.text).then(response => {
-        console.log(response);
         if(response.rowCount > 0) {
             return res.status(200).json(response.rows)
         } else {
             return res.status(400).json({ error: "Unable to get all users" });
         }
     }).catch((err) => {
-        console.log("Failed to update profile", err);
+        console.log(err);
         return res.status(400).json({ error: "Server error!" });
     });
 }
@@ -200,7 +197,7 @@ module.exports.updatePassword = (req, res) => {
             return res.status(400).json({ error: "Unable to update password" });
         }
     }).catch((err) => {
-        console.log("Failed to update profile", err);
+        console.log(err);
         return res.status(400).json({ error: "Server error!" });
     });
 }
@@ -257,7 +254,6 @@ module.exports.deactivateAccount = (req, res) => {
     }
     
     pool.query(query.text, query.value).then(data => {
-        console.log(data);
         if(data.rowCount > 0){
             return res.status(200).json({ success: true })
         }else{

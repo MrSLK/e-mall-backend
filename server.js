@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const Sentry = require("@sentry/node");
+const Tracing = require("@sentry/tracing");
+
 const userRoute = require('./Routes/user');
 const categoryRoute = require('./Routes/category');
 const cartRoute = require('./Routes/cart');
@@ -24,6 +27,36 @@ app.use(express.urlencoded({ extended: false }));
 app.get('/', (req,res)=>{
     res.send("E-Mall backend running");
 });
+
+// or use es6 import statements
+// import * as Sentry from '@sentry/node';
+
+// or use es6 import statements
+// import * as Tracing from '@sentry/tracing';
+
+Sentry.init({
+  dsn: "https://f11476ca0d274ad3a8f9207f97a039a3@o4504914879578112.ingest.sentry.io/4504914880757760",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
+
+const transaction = Sentry.startTransaction({
+  op: "test",
+  name: "My First Test Transaction",
+});
+
+setTimeout(() => {
+  try {
+    foo();
+  } catch (e) {
+    Sentry.captureException(e);
+  } finally {
+    transaction.finish();
+  }
+}, 99);
 
 
 app.use('/user', userRoute);

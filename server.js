@@ -71,6 +71,6 @@ app.use('/report', adminReportRoute);
 app.use('/order', orderHistoryRoute);
 
 app.listen(PORT, HOST, ()=>{
-    console.log('server is listening to port http://localhost:', PORT);
+    console.log('server is listening to port http://localhost:' + PORT);
 })
 

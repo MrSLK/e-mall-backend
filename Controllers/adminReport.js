@@ -3,7 +3,6 @@ const ObjectsToCsv = require('objects-to-csv');
 
 module.exports.userReport = (req, res) => {
 
-  console.log(req.params);
   let query = {
     text: `select first_name, last_name, email, cellno, account_status, usertype from users WHERE id != $1`,
     value: [req.params.user_id]
@@ -155,7 +154,6 @@ module.exports.salesReport = (req, res) => {
             customer: data.customer[a]
           }
         }
-        // console.log(newObj[0]);
 
         let rows = [], row = {}, rest = {}
         newObj.forEach(element => {
@@ -177,10 +175,8 @@ module.exports.salesReport = (req, res) => {
             quantity: "",
             'Order Total': element.total,
           }
-          console.log("Rest ->", rest);
           rows.push(rest)
 
-          console.log(row);
         });
 
         // return res.status(200).json(data)
@@ -263,4 +259,179 @@ module.exports.salesReportObject = (req, res) => {
     console.log(err);
     return res.status(400).json({ message: 'Internal Server Error' })
   });
+}
+
+module.exports.moneyAllocation = (req, res) => {
+
+  let eachProduct = []
+  let shops = []
+  let report = []
+  let myProfit = 0
+
+  let query = {
+    text: 'select product_id, quantity from orders'
+  }
+
+  pool.query(query.text).then(async (orders) => {
+    for (let x = 0; x < orders.rows.length; x++) {
+      for (p = 0; p < orders.rows[x].product_id.length; p++) {
+        eachProduct.push({ productId: orders.rows[x].product_id[p], quantity: orders.rows[x].quantity[p] })
+      }
+    }
+
+    const quantitiesByProductId = eachProduct.reduce((acc, obj) => {
+      const { productId, quantity } = obj;
+      if (acc[productId]) {
+        acc[productId] += quantity;
+      } else {
+        acc[productId] = quantity;
+      }
+      return acc;
+    }, {});
+
+    setTimeout(async () => {
+      // loop through each key/value
+      for (let key in quantitiesByProductId) {
+
+        let quantity = quantitiesByProductId[key]
+
+        let prodQuery = {
+          text: 'select product.name, product.shop_id, product.price, shop.name from product, shop where product.shop_id = shop.id AND product.id = $1',
+          value: [key]
+        }
+
+        await pool.query(prodQuery.text, prodQuery.value).then((prodInformation) => {
+
+          let shopObj = {
+            shopName: prodInformation.rows[0].name,
+            moneyMade: prodInformation.rows[0].price * quantity
+          }
+          shops.push(shopObj)
+        }).catch((err) => {
+          console.log(err)
+          return res.status(400).send("Everything is not ok!. Check terminal")
+        })
+      }
+      
+      const moneyByShops = shops.reduce((acc, obj) => {
+        const { shopName, moneyMade } = obj;
+        if (acc[shopName]) {
+          acc[shopName] += moneyMade;
+        } else {
+          acc[shopName] = moneyMade;
+        }
+        return acc;
+      }, {});
+
+      for (let key in moneyByShops) {
+        let moneyWeMade = moneyByShops[key] * 0.08
+        myProfit = myProfit + moneyWeMade
+        let tempObj = {
+          'Shop Name': key,
+          'Money Made': parseFloat(moneyByShops[key]).toFixed(2),
+          'Our Profit': parseFloat(moneyWeMade).toFixed(2)
+        }
+        report.push(tempObj);
+      }
+      report.push({
+        'Shop Name': '',
+        'Money Made': '',
+        'Our Profit':''
+      })
+      report.push({'Shop Name': '', 'Money Made': 'Total Profit', 'Our Profit': parseFloat(myProfit).toFixed(2)})
+      const csv = new ObjectsToCsv(report);
+
+      // Save to file:
+      await csv.toDisk('./Money allocation.csv');
+
+      return res.download("./Money allocation.csv")
+    }, 10000)
+  }).catch((err) => {
+    console.log(err)
+    return res.status(400).send("Everything is not ok!. Check terminal")
+  })
+
+
+}
+
+module.exports.moneyAllocationObject = (req, res) => {
+
+  let eachProduct = []
+  let shops = []
+  let report = []
+
+  let query = {
+    text: 'select product_id, quantity from orders'
+  }
+
+  pool.query(query.text).then(async (orders) => {
+    for (let x = 0; x < orders.rows.length; x++) {
+      for (p = 0; p < orders.rows[x].product_id.length; p++) {
+        eachProduct.push({ productId: orders.rows[x].product_id[p], quantity: orders.rows[x].quantity[p] })
+      }
+    }
+
+    const quantitiesByProductId = eachProduct.reduce((acc, obj) => {
+      const { productId, quantity } = obj;
+      if (acc[productId]) {
+        acc[productId] += quantity;
+      } else {
+        acc[productId] = quantity;
+      }
+      return acc;
+    }, {});
+
+    setTimeout(async () => {
+      // loop through each key/value
+      for (let key in quantitiesByProductId) {
+
+        let quantity = quantitiesByProductId[key]
+
+        let prodQuery = {
+          text: 'select product.name, product.shop_id, product.price, shop.name from product, shop where product.shop_id = shop.id AND product.id = $1',
+          value: [key]
+        }
+
+        await pool.query(prodQuery.text, prodQuery.value).then((prodInformation) => {
+
+          let shopObj = {
+            shopName: prodInformation.rows[0].name,
+            moneyMade: prodInformation.rows[0].price * quantity
+          }
+          shops.push(shopObj)
+        }).catch((err) => {
+          console.log(err)
+          return res.status(400).send("Everything is not ok!. Check terminal")
+        })
+      }
+      
+      const moneyByShops = shops.reduce((acc, obj) => {
+        const { shopName, moneyMade } = obj;
+        if (acc[shopName]) {
+          acc[shopName] += moneyMade;
+        } else {
+          acc[shopName] = moneyMade;
+        }
+        return acc;
+      }, {});
+
+      for (let key in moneyByShops) {
+        let moneyWeMade = moneyByShops[key] * 0.08
+        myProfit = myProfit + moneyWeMade
+        let tempObj = {
+          'Shop Name': key,
+          'Money Made': parseFloat(moneyByShops[key]).toFixed(2),
+          'Our Profit': parseFloat(moneyWeMade).toFixed(2)
+        }
+        report.push(tempObj);
+      }
+      report.push({'Shop Name': '', 'Money Made': 'Total Profit', 'Our Profit': parseFloat(myProfit).toFixed(2)})
+      res.status(200).json({data: report})
+    }, 10000)
+  }).catch((err) => {
+    console.log(err)
+    return res.status(400).send("Everything is not ok!. Check terminal")
+  })
+
+
 }

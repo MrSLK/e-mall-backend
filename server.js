@@ -16,9 +16,7 @@ const orderHistoryRoute = require('./Routes/orderHistory');
 
 const HOST = "0.0.0.0";
 
-const PORT = process.env.PORT || 5000; 
-
-const corsOptions = {origin: '*'}
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -27,12 +25,6 @@ app.use(express.urlencoded({ extended: false }));
 app.get('/', (req,res)=>{
     res.send("E-Mall backend running");
 });
-
-// or use es6 import statements
-// import * as Sentry from '@sentry/node';
-
-// or use es6 import statements
-// import * as Tracing from '@sentry/tracing';
 
 Sentry.init({
   dsn: "https://f11476ca0d274ad3a8f9207f97a039a3@o4504914879578112.ingest.sentry.io/4504914880757760",

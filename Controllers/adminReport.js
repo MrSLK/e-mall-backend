@@ -312,7 +312,7 @@ module.exports.moneyAllocation = (req, res) => {
           return res.status(400).send("Everything is not ok!. Check terminal")
         })
       }
-      
+
       const moneyByShops = shops.reduce((acc, obj) => {
         const { shopName, moneyMade } = obj;
         if (acc[shopName]) {
@@ -336,9 +336,9 @@ module.exports.moneyAllocation = (req, res) => {
       report.push({
         'Shop Name': '',
         'Money Made': '',
-        'Our Profit':''
+        'Our Profit': ''
       })
-      report.push({'Shop Name': '', 'Money Made': 'Total Profit', 'Our Profit': parseFloat(myProfit).toFixed(2)})
+      report.push({ 'Shop Name': '', 'Money Made': 'Total Profit', 'Our Profit': parseFloat(myProfit).toFixed(2) })
       const csv = new ObjectsToCsv(report);
 
       // Save to file:
@@ -404,7 +404,7 @@ module.exports.moneyAllocationObject = (req, res) => {
           return res.status(400).send("Everything is not ok!. Check terminal")
         })
       }
-      
+
       const moneyByShops = shops.reduce((acc, obj) => {
         const { shopName, moneyMade } = obj;
         if (acc[shopName]) {
@@ -425,8 +425,8 @@ module.exports.moneyAllocationObject = (req, res) => {
         }
         report.push(tempObj);
       }
-      report.push({'Shop Name': '', 'Money Made': 'Total Profit', 'Our Profit': parseFloat(myProfit).toFixed(2)})
-      res.status(200).json({data: report})
+      report.push({ 'Shop Name': '', 'Money Made': 'Total Profit', 'Our Profit': parseFloat(myProfit).toFixed(2) })
+      res.status(200).json({ data: report })
     }, 10000)
   }).catch((err) => {
     console.log(err)

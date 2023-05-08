@@ -104,14 +104,8 @@ module.exports.getOneProduct = (req, res) => {
     }
 
     pool.query(query.text, query.value).then((response) => {
-<<<<<<< HEAD
-        console.log("response", response.rows);
         
 
-=======
-
-        console.log("Line 148 ->",response.rows);
->>>>>>> bd37ed7327205efea9c5933fbba6a8f057415ce0
     let cheaperQuery = {
         text: `select product.id, 
         product.name AS product_name, 
@@ -125,18 +119,10 @@ module.exports.getOneProduct = (req, res) => {
         from product, shop 
         WHERE product.shop_id = shop.id 
         AND product.shop_id != $1 
-<<<<<<< HEAD
         AND product.price < $3
         AND product.category_id = $2`,
         value: [req.body.shop_id, req.body.category_id, response.rows[0].price]
     }
-=======
-        AND product.price < $2
-        AND product.name = $3`,
-        value: [req.body.shop_id, response.rows[0].price, response.rows[0].product]
-    }
-
->>>>>>> bd37ed7327205efea9c5933fbba6a8f057415ce0
         if (response.rowCount > 0) {
             pool.query(cheaperQuery.text, cheaperQuery.value).then((result) => {
                 

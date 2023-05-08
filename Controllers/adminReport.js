@@ -359,6 +359,7 @@ module.exports.moneyAllocationObject = (req, res) => {
   let eachProduct = []
   let shops = []
   let report = []
+  let myProfit = 0
 
   let query = {
     text: 'select product_id, quantity from orders'

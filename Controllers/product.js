@@ -121,7 +121,7 @@ module.exports.getOneProduct = (req, res) => {
         AND product.shop_id != $1 
         AND product.price < $3
         AND product.category_id = $2`,
-        value: [req.body.shop_id, req.body.category_id, response.rows[0].price]
+        value: [req.body.shop_id, response.rows[0].category_id, response.rows[0].price]
     }
         if (response.rowCount > 0) {
             console.log("cheaperQuery ->", cheaperQuery)

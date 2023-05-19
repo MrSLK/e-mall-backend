@@ -124,6 +124,7 @@ module.exports.getOneProduct = (req, res) => {
         value: [req.body.shop_id, req.body.category_id, response.rows[0].price]
     }
         if (response.rowCount > 0) {
+            console.log("cheaperQuery ->", cheaperQuery)
             pool.query(cheaperQuery.text, cheaperQuery.value).then((result) => {
             console.log("result.rows ->", result.rows)
                 let object = {

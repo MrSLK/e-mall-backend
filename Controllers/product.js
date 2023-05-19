@@ -123,6 +123,7 @@ module.exports.getOneProduct = (req, res) => {
         AND product.category_id = $2`,
         value: [req.body.shop_id, req.body.category_id, response.rows[0].price]
     }
+        console.log("response.rows ->", response.rows)
         if (response.rowCount > 0) {
             pool.query(cheaperQuery.text, cheaperQuery.value).then((result) => {
                 

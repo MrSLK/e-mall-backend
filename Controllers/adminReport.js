@@ -426,8 +426,7 @@ module.exports.moneyAllocationObject = (req, res) => {
         }
         report.push(tempObj);
       }
-      report.push({ 'shopName': '', 'moneyMade': 'Total Profit', 'ourProfit': parseFloat(myProfit).toFixed(2) })
-      res.status(200).json({ data: report })
+      res.status(200).json({ data: report, systemProfit: parseFloat(myProfit).toFixed(2)})
     }, 10000)
   }).catch((err) => {
     console.log(err)

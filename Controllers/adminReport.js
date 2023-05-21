@@ -420,13 +420,13 @@ module.exports.moneyAllocationObject = (req, res) => {
         let moneyWeMade = moneyByShops[key] * 0.08
         myProfit = myProfit + moneyWeMade
         let tempObj = {
-          'Shop Name': key,
-          'Money Made': parseFloat(moneyByShops[key]).toFixed(2),
-          'Our Profit': parseFloat(moneyWeMade).toFixed(2)
+          'shopName': key,
+          'moneyMade': parseFloat(moneyByShops[key]).toFixed(2),
+          'ourProfit': parseFloat(moneyWeMade).toFixed(2)
         }
         report.push(tempObj);
       }
-      report.push({ 'Shop Name': '', 'Money Made': 'Total Profit', 'Our Profit': parseFloat(myProfit).toFixed(2) })
+      report.push({ 'shopName': '', 'moneyMade': 'Total Profit', 'ourProfit': parseFloat(myProfit).toFixed(2) })
       res.status(200).json({ data: report })
     }, 10000)
   }).catch((err) => {

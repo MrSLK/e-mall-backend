@@ -176,7 +176,6 @@ module.exports.salesReport = (req, res) => {
             'Order Total': element.total,
           }
           rows.push(rest)
-
         });
 
         // return res.status(200).json(data)
@@ -385,14 +384,11 @@ module.exports.moneyAllocationObject = (req, res) => {
     setTimeout(async () => {
       // loop through each key/value
       for (let key in quantitiesByProductId) {
-
         let quantity = quantitiesByProductId[key]
-
         let prodQuery = {
           text: 'select product.name, product.shop_id, product.price, shop.name from product, shop where product.shop_id = shop.id AND product.id = $1',
           value: [key]
         }
-
         await pool.query(prodQuery.text, prodQuery.value).then((prodInformation) => {
 
           let shopObj = {
@@ -426,12 +422,10 @@ module.exports.moneyAllocationObject = (req, res) => {
         }
         report.push(tempObj);
       }
-      res.status(200).json({ data: report, systemProfit: parseFloat(myProfit).toFixed(2)})
+      res.status(200).json({ data: report, systemProfit: parseFloat(myProfit).toFixed(2) })
     }, 10000)
   }).catch((err) => {
     console.log(err)
     return res.status(400).send("Everything is not ok!. Check terminal")
   })
-
-
 }

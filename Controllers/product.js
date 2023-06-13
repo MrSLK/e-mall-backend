@@ -86,78 +86,29 @@ module.exports.getAllProductsOfAShop = (req, res) => {
 
 module.exports.getOneProduct = (req, res) => {
 
-    let query = {
-        text: `select product.id, 
-        product.name AS product, 
-        product.description, 
-        product.price, 
-        product.quantity, 
-        product.category_id,
-        product.shop_id,
-        product.picture_url,
-        shop.name AS shop
-        from product, shop 
-        WHERE product.shop_id = shop.id 
-        AND product.name = $1
-        AND product.id = $2`,
-        value: [req.body.product_name, req.body.product_id]
-    }
+    const query = {
+        text: `SELECT 
+          product.id,
+          product.name AS product_name, 
+          product.description, 
+          product.price, 
+          product.quantity, 
+          product.category_id,
+          product.shop_id,
+          product.picture_url,
+          shop.name AS shop
+        FROM product
+        JOIN shop ON product.shop_id = shop.id
+        WHERE product.name = $1`,
+        value: [req.body.product_name]
+      };
 
-    pool.query(query.text, query.value).then((response) => {
-        
-
-    let cheaperQuery = {
-        text: `select product.id, 
-        product.name AS product_name, 
-        product.description, 
-        product.price, 
-        product.quantity, 
-        product.category_id,
-        product.shop_id,
-        product.picture_url,
-        shop.name AS shop_name
-        from product, shop 
-        WHERE product.shop_id = shop.id 
-        AND product.shop_id != $1 
-        AND product.price < $3
-        AND product.category_id = $2`,
-        value: [req.body.shop_id, response.rows[0].category_id, response.rows[0].price]
-    }
-        if (response.rowCount > 0) {
-            console.log("cheaperQuery ->", cheaperQuery)
-            pool.query(cheaperQuery.text, cheaperQuery.value).then((result) => {
-            console.log("result.rows ->", result.rows)
-                let object = {
-                    id: response.rows[0].id,
-                    name: response.rows[0].product,
-                    description: response.rows[0].description,
-                    price: response.rows[0].price,
-                    picture_url: response.rows[0].picture_url,
-                    quantity_left: response.rows[0].quantity,
-                    category_id: response.rows[0].category_id,
-                    shop: response.rows[0].shop,
-                    cheaperProduct: {
-                        id: result.rows[0].id,
-                        name: result.rows[0].product_name, 
-                        description: result.rows[0].description, 
-                        price: result.rows[0].price,
-                        quantity_left: result.rows[0].quantity,
-                        picture_url: result.rows[0].picture_url,
-                        category_id: result.rows[0].category_id,
-                        shop: result.rows[0].shop_name
-                    }
-                }
-
-                return res.status(201).json(object);
-                
-            }).catch((err) => {
-                console.log(err);
-                return res.status(400).json({ message: 'Cheaper -Server error' });
-            });
-        }
+    pool.query(query.text, query.value).then(response => {
+        console.log('response: ', response.rows)
+        if (response) return res.status(200).json(response.rows)
+            return res.status(400).json({ message: 'No products found' });
     }).catch((err) => {
         console.log(err);
-        return res.status(400).json({ message: 'Server error' });
-    });
-
+        return res.status(400).json({ message: 'Server error' });
+    });
 }
